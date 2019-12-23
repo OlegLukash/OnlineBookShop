@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineBookShop.API", "OnlineBookShop.API\OnlineBookShop.API.csproj", "{4835A9BE-9E8E-43AE-9C83-7B3C4D5B09E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineBookShop.API", "src\OnlineBookShop.API\OnlineBookShop.API.csproj", "{4835A9BE-9E8E-43AE-9C83-7B3C4D5B09E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
