@@ -36,6 +36,8 @@ namespace OnlineBookShop.API
 
             app.UseRouting();
 
+            app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
