@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OnlineBookShop.API.Dtos.Books;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Controllers
@@ -9,18 +12,21 @@ namespace OnlineBookShop.API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IRepository<Book> _bookRepository;
+        private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public BooksController(IRepository<Book> bookRepository)
+        public BooksController(IRepository repository, IMapper mapper)
         {
-            _bookRepository = bookRepository;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllBooks()
         {
-            var books = await _bookRepository.GetAll();
-            return Ok(books);
+            var books = await _repository.GetAll<Book>();
+            var bookDtos = _mapper.Map<List<BookDto>>(books);
+            return Ok(bookDtos);
         }
     }
 }

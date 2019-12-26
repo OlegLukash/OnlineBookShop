@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineBookShop.API.Repositories.Implementation;
 using OnlineBookShop.API.Repositories.Interfaces;
+using System.Reflection;
 
 namespace OnlineBookShop.API
 {
@@ -27,7 +29,8 @@ namespace OnlineBookShop.API
             });
             services.AddControllers();
 
-            services.AddScoped(typeof(IRepository<>), typeof(EFCoreRepository<>));
+            services.AddScoped<IRepository, EFCoreRepository>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

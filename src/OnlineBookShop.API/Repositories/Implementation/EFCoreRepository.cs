@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Repositories.Implementation
 {
-    public class EFCoreRepository<TEntity> : IRepository<TEntity> where TEntity: BaseEntity
+    public class EFCoreRepository: IRepository
     {
         private readonly OnlineBookShopDbContext _onlineBookShopDbContext;
 
@@ -16,14 +16,14 @@ namespace OnlineBookShop.API.Repositories.Implementation
             _onlineBookShopDbContext = onlineBookShopDbContext;
         }
 
-        public async Task<List<TEntity>> GetAll()
+        public async Task<List<TEntity>> GetAll<TEntity>() where TEntity : BaseEntity
         {
             return await _onlineBookShopDbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById<TEntity>(int id) where TEntity : BaseEntity
         {
-            return await _onlineBookShopDbContext.FindAsync<TEntity>(id);
+            return await _onlineBookShopDbContext.FindAsync<TEntity>();
         }
     }
 }
