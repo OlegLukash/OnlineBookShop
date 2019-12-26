@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineBookShop.API.Repositories.Implementation;
+using OnlineBookShop.API.Repositories.Interfaces;
 
 namespace OnlineBookShop.API
 {
@@ -24,6 +26,8 @@ namespace OnlineBookShop.API
                 optionBuilder.UseSqlServer(Configuration.GetConnectionString("OnlineBookShopConnection"));
             });
             services.AddControllers();
+
+            services.AddScoped(typeof(IRepository<>), typeof(EFCoreRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

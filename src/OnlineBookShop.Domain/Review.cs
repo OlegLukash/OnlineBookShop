@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineBookShop.Domain
+﻿namespace OnlineBookShop.Domain
 {
-    public class Review : Entity<int>
+    public class Review : BaseEntity
     {
         public string VoterName { get; set; }
 

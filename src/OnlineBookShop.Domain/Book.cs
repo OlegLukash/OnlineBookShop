@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OnlineBookShop.Domain
 {
-    public class Book : Entity<int>
+    public class Book : BaseEntity
     {
         public string Title { get; set; }
 

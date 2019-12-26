@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineBookShop.Domain
+﻿namespace OnlineBookShop.Domain
 {
-    public class PriceOffer : Entity<int>
+    public class PriceOffer : BaseEntity
     {
         public decimal NewPrice { get; set; }
 

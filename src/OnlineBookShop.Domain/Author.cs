@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OnlineBookShop.Domain
 {
-    public class Author : Entity<int>
+    public class Author : BaseEntity
     {
         public string Name { get; set; }
 
