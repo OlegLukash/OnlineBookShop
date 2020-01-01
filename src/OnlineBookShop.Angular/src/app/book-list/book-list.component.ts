@@ -3,6 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../_models/Book';
 import { BookService } from '../_services/book.service';
 
+import {
+  MatDialog,
+  MatSnackBar,
+  MatPaginator,
+  MatTableDataSource,
+  MatSort
+} from '@angular/material';
+
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -10,7 +18,9 @@ import { BookService } from '../_services/book.service';
 })
 export class BookListComponent implements OnInit {
 
-  books: Book[];
+  books: Book[] = [];
+
+  displayedColumns: string[] = ['id', 'title'];
 
   constructor(
     private bookService: BookService

@@ -1,8 +1,29 @@
-<p>
-  book-list works!
-</p>
+<!-- <mat-sidenav-container> -->
+  <mat-card class='light' style="height: 100%;">
+    <mat-card-header>
+      <mat-card-title class="view-card-title">
+        <h1>Books</h1>
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-table #table [dataSource]="books" matSort>
+      
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> No </mat-header-cell>
+        <mat-cell *matCellDef="let book"> {{book.id}} </mat-cell>
+      </ng-container>
+     
+	 <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+        <mat-cell *matCellDef="let book"> {{book.title}} </mat-cell>
+      </ng-container>
+     
+      
+	  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 
-<div *ngFor="let book of books">
-  <span>{{ book.id }}. </span>
-  <span>{{ book.title }}</span>
-</div>
+  </mat-card>
+  
+  <!-- </mat-sidenav-container> -->
+  
