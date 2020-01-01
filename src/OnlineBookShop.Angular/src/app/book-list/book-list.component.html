@@ -1,3 +1,8 @@
 <p>
   book-list works!
 </p>
+
+<div *ngFor="let book of books">
+  <span>{{ book.id }}. </span>
+  <span>{{ book.title }}</span>
+</div>
