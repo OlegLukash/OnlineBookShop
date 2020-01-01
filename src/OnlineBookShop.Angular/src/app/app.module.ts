@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { BookListComponent } from './book-list/book-list.component';
+import { RootComponent } from './root/root.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent},
@@ -17,14 +18,15 @@ const appRoutes: Routes = [
       AppComponent,
       BookListComponent,
       HomeComponent,
-      BookListComponent
+      BookListComponent,
+      RootComponent
    ],
    imports: [
       BrowserModule,
       HttpClientModule,
       RouterModule.forRoot(
-        appRoutes
-      )
+         appRoutes
+       )
    ],
    providers: [],
    bootstrap: [
