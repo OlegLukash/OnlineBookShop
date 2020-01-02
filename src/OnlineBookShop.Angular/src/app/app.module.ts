@@ -44,13 +44,10 @@ import {
   MatToolbarModule,
   MatTooltipModule,
  } from '@angular/material';
+import { AppRoutingModule } from './app-routing.module';
 
 
-const appRoutes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'books', component: BookListComponent },
-  { path: 'root', component: RootComponent }
-];
+
 
 @NgModule({
    declarations: [
@@ -97,9 +94,7 @@ const appRoutes: Routes = [
       MatTooltipModule,
 
       HttpClientModule,
-      RouterModule.forRoot(
-         appRoutes
-       )
+      AppRoutingModule
    ],
    providers: [],
    bootstrap: [
