@@ -6,10 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { NotfoundpageComponent } from './shared/notfoundpage/notfoundpage.component';
 
 @NgModule({
    declarations: [
       AppComponent,
+      NotfoundpageComponent
    ],
    imports: [
       BrowserModule,
