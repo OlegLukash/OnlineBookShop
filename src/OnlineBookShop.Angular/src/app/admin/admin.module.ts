@@ -38,6 +38,7 @@ import {
 
 import { AdminComponent } from './admin/admin.component';
 import { BookListComponent } from './books/book-list/book-list.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { BookListComponent } from './books/book-list/book-list.component';
   ],
   declarations: [
     AdminComponent,
-    BookListComponent
+    BookListComponent,
+    DashboardComponent
   ]
 })
 export class AdminModule { }
