@@ -39,6 +39,8 @@ import {
 import { AdminComponent } from './admin/admin.component';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EditBookComponent } from './books/editBook/editBook.component';
+
 
 @NgModule({
   imports: [
@@ -81,6 +83,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   declarations: [
     AdminComponent,
     BookListComponent,
+    EditBookComponent,
     DashboardComponent
   ]
 })

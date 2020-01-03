@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EditBookComponent } from './books/editBook/editBook.component';
+
 
 
 const adminRoutes: Routes = [
@@ -16,6 +18,7 @@ const adminRoutes: Routes = [
         children: [
           { path: 'dashboard', component: DashboardComponent },
           { path: 'books', component: BookListComponent },
+          { path: 'editBook/:id', component: EditBookComponent }
         ]
       }
     ]
