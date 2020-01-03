@@ -20,7 +20,7 @@ export class BookListComponent implements OnInit {
 
   books: Book[] = [];
 
-  displayedColumns: string[] = ['id', 'title'];
+  displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
 
   constructor(
     private bookService: BookService

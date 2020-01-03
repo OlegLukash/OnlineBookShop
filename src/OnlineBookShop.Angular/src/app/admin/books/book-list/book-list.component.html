@@ -5,17 +5,62 @@
         <h1>Books</h1>
       </mat-card-title>
     </mat-card-header>
-    
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <mat-form-field>
+          <mat-placeholder>
+            <mat-icon>subject</mat-icon>
+            <b> Filter</b>
+          </mat-placeholder>
+          <input matInput (keyup)="applyFilter($event.target.value)">
+        </mat-form-field>
+        <span class="title-spacer"></span>
+        <button mat-mini-fab style="margin-right:10px; background-color:#e07c9e" [routerLink]="['/editBook', 0]">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab style="margin-right:10px; background-color:#a28b6e" (click)="sidenav.toggle()">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button mat-mini-fab style="margin-right:10px; background-color:darkgray" (click)="reset()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
     <mat-table #table [dataSource]="books" matSort>
-      
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> No </mat-header-cell>
-        <mat-cell *matCellDef="let book"> {{book.id}} </mat-cell>
-      </ng-container>
      
-	 <ng-container matColumnDef="title">
+	    <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
         <mat-cell *matCellDef="let book"> {{book.title}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="publisher">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Publisher </mat-header-cell>
+        <mat-cell *matCellDef="let book"> {{book.publisher}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="publishedOn">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Published On </mat-header-cell>
+        <mat-cell *matCellDef="let book"> {{book.publishedOn | date}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+        <mat-cell *matCellDef="let book"> {{book.price | currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef style="justify-content:right;">
+          <button mat-button style="color:white; background-color:darkgrey" (click)="resetListFilter()">Reset</button>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let book" style="justify-content:right;">
+          <button mat-mini-fab style="background-color:teal; min-height: 30px;   margin: 5px;" [routerLink]="['/editBook', book.id]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-mini-fab style="background-color:lightblue; min-height: 30px;  margin: 5px;" (click)="openDialog(book.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
       </ng-container>
      
       
