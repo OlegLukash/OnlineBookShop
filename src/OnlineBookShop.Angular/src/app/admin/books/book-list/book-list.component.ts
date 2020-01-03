@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Book } from '../_models/Book';
-import { BookService } from '../_services/book.service';
+import { Book } from '../../../_models/Book';
+import { BookService } from '../../../_services/book.service';
 
 import {
   MatDialog,

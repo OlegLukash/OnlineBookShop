@@ -37,6 +37,7 @@ import {
 } from '@angular/material';
 
 import { AdminComponent } from './admin/admin.component';
+import { BookListComponent } from './books/book-list/book-list.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,9 @@ import { AdminComponent } from './admin/admin.component';
     MatTooltipModule,
 
   ],
-  declarations: [AdminComponent]
+  declarations: [
+    AdminComponent,
+    BookListComponent
+  ]
 })
 export class AdminModule { }
