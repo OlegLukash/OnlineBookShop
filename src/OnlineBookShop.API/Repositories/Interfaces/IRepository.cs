@@ -12,5 +12,10 @@ namespace OnlineBookShop.API.Repositories.Interfaces
 
         Task<bool> SaveAll();
 
+        Task<TEntity> Add<TEntity>(TEntity entity) where TEntity : BaseEntity;
+
+        Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : BaseEntity;
+
+        Task<TEntity> Delete<TEntity>(int id) where TEntity : BaseEntity;
     }
 }

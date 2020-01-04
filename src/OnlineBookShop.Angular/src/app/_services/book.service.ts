@@ -23,8 +23,19 @@ export class BookService {
     return this.http.get<Book>(this.baseUrl + 'books/' + id);
   }
 
-  updateBook(book: Book): Observable<Book> {
+  saveBook(book: Book): Observable<Book>{
+    if (book.id > 0) {
+      return this.updateBook(book);
+    }
+    return this.createBook(book);
+  }
+
+  private updateBook(book: Book): Observable<Book> {
     return this.http.put<Book>(this.baseUrl + 'books/' + book.id, book);
+  }
+
+  private createBook(book: Book): Observable<Book>{
+    return this.http.post<Book>(this.baseUrl + 'books/', book);
   }
 
 }

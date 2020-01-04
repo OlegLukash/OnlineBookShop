@@ -37,6 +37,17 @@ namespace OnlineBookShop.API.Controllers
             return Ok(bookDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateBook(BookForUpdateDto bookForUpdateDto)
+        {
+            var book = _mapper.Map<Book>(bookForUpdateDto);
+            await _repository.Add<Book>(book);
+
+            var bookDto = _mapper.Map<BookDto>(book);
+
+            return CreatedAtAction(nameof(GetBook), new { id = bookDto.Id }, bookDto);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, BookForUpdateDto bookDto)
         {

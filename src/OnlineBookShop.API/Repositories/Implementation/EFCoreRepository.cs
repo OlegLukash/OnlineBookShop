@@ -30,5 +30,34 @@ namespace OnlineBookShop.API.Repositories.Implementation
         {
             return await _onlineBookShopDbContext.SaveChangesAsync() >= 0;
         }
+
+        public async Task<TEntity> Add<TEntity>(TEntity entity) where TEntity : BaseEntity
+        {
+            _onlineBookShopDbContext.Set<TEntity>().Add(entity);
+            await _onlineBookShopDbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity: BaseEntity
+        {
+            // In case entity is not tracked
+            _onlineBookShopDbContext.Entry(entity).State = EntityState.Modified;
+            await _onlineBookShopDbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<TEntity> Delete<TEntity>(int id) where TEntity: BaseEntity
+        {
+            var entity = await _onlineBookShopDbContext.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+            {
+                throw new Exception($"Object of type {typeof(TEntity)} with id { id } not found");
+            }
+
+            _onlineBookShopDbContext.Set<TEntity>().Remove(entity);
+            await _onlineBookShopDbContext.SaveChangesAsync();
+
+            return entity;
+        }
     }
 }

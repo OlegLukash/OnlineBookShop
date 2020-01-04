@@ -26,7 +26,7 @@ export class EditBookComponent implements OnInit {
     this.bookForm = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       description: ['', Validators.minLength(5)],
-      publishedOn: ['', [Validators.required]],
+      publishedOn: [new Date(), [Validators.required]],
       publisher: ['', [Validators.required]],
       price: ['', [Validators.required]]
     });
@@ -55,7 +55,7 @@ export class EditBookComponent implements OnInit {
   saveBook(): void {
     if (this.bookForm.dirty && this.bookForm.valid) {
        const book = Object.assign({}, this.book, this.bookForm.value);
-       this.bookService.updateBook(book).subscribe(
+       this.bookService.saveBook(book).subscribe(
          () => this.onSaveComplete()
        );
     }
