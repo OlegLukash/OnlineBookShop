@@ -36,6 +36,8 @@ import {
       MatTooltipModule,
 } from '@angular/material';
 
+import {ReactiveFormsModule} from '@angular/forms';
+
 import { AdminComponent } from './admin/admin.component';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -78,6 +80,8 @@ import { EditBookComponent } from './books/editBook/editBook.component';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+
+    ReactiveFormsModule
 
   ],
   declarations: [

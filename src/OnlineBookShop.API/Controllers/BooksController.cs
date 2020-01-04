@@ -28,5 +28,23 @@ namespace OnlineBookShop.API.Controllers
             var bookDtos = _mapper.Map<List<BookDto>>(books);
             return Ok(bookDtos);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBook(int id)
+        {
+            var book = await _repository.GetById<Book>(id);
+            var bookDto = _mapper.Map<BookDto>(book);
+            return Ok(bookDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBook(int id, BookForUpdateDto bookDto)
+        {
+            var book = await _repository.GetById<Book>(id);
+            _mapper.Map(bookDto, book);
+            await _repository.SaveAll();
+            
+            return NoContent();
+        }
     }
 }

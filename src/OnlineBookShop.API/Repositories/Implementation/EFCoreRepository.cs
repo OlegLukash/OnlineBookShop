@@ -23,7 +23,12 @@ namespace OnlineBookShop.API.Repositories.Implementation
 
         public async Task<TEntity> GetById<TEntity>(int id) where TEntity : BaseEntity
         {
-            return await _onlineBookShopDbContext.FindAsync<TEntity>();
+            return await _onlineBookShopDbContext.FindAsync<TEntity>(id);
+        }
+
+        public async Task<bool> SaveAll()
+        {
+            return await _onlineBookShopDbContext.SaveChangesAsync() >= 0;
         }
     }
 }

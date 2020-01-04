@@ -1,17 +1,17 @@
-<mat-card class='light' style="height: 100%;">
+<mat-card>
   <mat-card-header>
     <mat-card-title class="view-card-title">
       <h1>Edit Book</h1>
     </mat-card-title>
   </mat-card-header>
-  <form novalidate (ngSubmit)="saveOrder()">
+  <form novalidate [formGroup]="bookForm" (ngSubmit)="saveBook()">
     <mat-toolbar style="background-color: #FFF">
       <mat-toolbar-row>
         <!-- <span class="view-card-title"> {{pageTitle}}</span> -->
         <span class="title-spacer"></span>
 
         <mat-card-actions>
-          <button mat-mini-fab class="primary" style="margin-right:10px; background-color:darkgray" type="submit">
+          <button mat-mini-fab class="primary" style="margin-right:10px; background-color:darkgray" type="submit" [disabled]='!bookForm.valid' >
             <mat-icon>save</mat-icon>
           </button>
           <button mat-mini-fab class="" style="margin-right:10px; " [routerLink]="['/admin/books']">
@@ -22,13 +22,31 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <mat-card-content style="margin: 5 0 5 0px;">
+    <mat-card-content >
       <div class="form-card">
-       
+        
+        <mat-form-field class="form-field-90">
+          <input matInput placeholder="Title" type="text" placeholder="Title. (required)" formControlName="title"/>
+        </mat-form-field>
+
+        <mat-form-field class="form-field-30">
+          <input matInput placeholder="Publisher" type="text" placeholder="Publisher (required)" formControlName="publisher"/>
+        </mat-form-field>
+
+        <mat-form-field class="form-field-30">
+          <input matInput [matDatepicker]="publishedOnDateId" placeholder="Published On" [value]="book?.publishedOn">
+          <mat-datepicker-toggle matSuffix [for]="publishedOnDateId"></mat-datepicker-toggle>
+          <mat-datepicker #publishedOnDateId></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="form-field-30">
+          <input matInput placeholder="Price"  type="number" placeholder="Price (required)" formControlName="price"/>
+        </mat-form-field>
+
+        <mat-form-field class="form-field-90">
+          <textarea matInput placeholder="Description (required)" formControlName="description" matTextareaAutosize></textarea>
+        </mat-form-field>
       </div>
-
-      <!-- product list -->
-
     </mat-card-content>
   </form>
 </mat-card>

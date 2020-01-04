@@ -23,4 +23,8 @@ export class BookService {
     return this.http.get<Book>(this.baseUrl + 'books/' + id);
   }
 
+  updateBook(book: Book): Observable<Book> {
+    return this.http.put<Book>(this.baseUrl + 'books/' + book.id, book);
+  }
+
 }

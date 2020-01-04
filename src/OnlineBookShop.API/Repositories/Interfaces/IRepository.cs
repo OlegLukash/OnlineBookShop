@@ -10,5 +10,7 @@ namespace OnlineBookShop.API.Repositories.Interfaces
 
         Task<List<TEntity>> GetAll<TEntity>() where TEntity : BaseEntity;
 
+        Task<bool> SaveAll();
+
     }
 }

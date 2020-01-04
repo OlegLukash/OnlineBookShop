@@ -9,6 +9,7 @@ namespace OnlineBookShop.API.Profiles
         public BookProfile()
         {
             CreateMap<Book, BookDto>();
+            CreateMap<BookForUpdateDto, Book>();
         }
     }
 }
