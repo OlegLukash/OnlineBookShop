@@ -30,6 +30,10 @@ export class BookService {
     return this.createBook(book);
   }
 
+  deleteBook(id: number) {
+    return this.http.delete(this.baseUrl + 'books/' + id);
+  }
+
   private updateBook(book: Book): Observable<Book> {
     return this.http.put<Book>(this.baseUrl + 'books/' + book.id, book);
   }

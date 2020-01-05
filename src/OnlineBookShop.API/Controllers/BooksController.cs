@@ -57,5 +57,12 @@ namespace OnlineBookShop.API.Controllers
             
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            await _repository.Delete<Book>(id);
+            return NoContent();
+        }
     }
 }

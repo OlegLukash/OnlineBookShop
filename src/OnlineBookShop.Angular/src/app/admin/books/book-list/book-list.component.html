@@ -21,7 +21,7 @@
         <button mat-mini-fab style="margin-right:10px; background-color:#a28b6e" (click)="sidenav.toggle()">
           <mat-icon>search</mat-icon>
         </button>
-        <button mat-mini-fab style="margin-right:10px; background-color:darkgray" (click)="reset()">
+        <button mat-mini-fab style="margin-right:10px; background-color:darkgray" (click)="loadBooks()">
           <mat-icon>refresh</mat-icon>
         </button>
       </mat-toolbar-row>
@@ -57,7 +57,7 @@
           <button mat-mini-fab style="background-color:teal; min-height: 30px;   margin: 5px;" [routerLink]="['/admin/editBook', book.id]">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-mini-fab style="background-color:lightblue; min-height: 30px;  margin: 5px;" (click)="openDialog(book.id)">
+          <button mat-mini-fab style="background-color:lightblue; min-height: 30px;  margin: 5px;" (click)="openDialogForDeleting(book.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-cell>

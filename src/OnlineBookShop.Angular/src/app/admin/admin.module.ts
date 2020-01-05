@@ -42,6 +42,7 @@ import { AdminComponent } from './admin/admin.component';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditBookComponent } from './books/editBook/editBook.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
 
 
 @NgModule({
@@ -84,7 +85,10 @@ import { EditBookComponent } from './books/editBook/editBook.component';
     ReactiveFormsModule
 
   ],
+  entryComponents: [ConfirmDialogComponent],
   declarations: [
+    ConfirmDialogComponent,
+    
     AdminComponent,
     BookListComponent,
     EditBookComponent,

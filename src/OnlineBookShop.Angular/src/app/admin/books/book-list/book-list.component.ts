@@ -10,6 +10,7 @@ import {
   MatTableDataSource,
   MatSort
 } from '@angular/material';
+import { ConfirmDialogComponent } from 'src/app/admin/shared/confirm-dialog.component';
 
 @Component({
   selector: 'app-book-list',
@@ -23,7 +24,9 @@ export class BookListComponent implements OnInit {
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
 
   constructor(
-    private bookService: BookService
+    private bookService: BookService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -34,6 +37,28 @@ export class BookListComponent implements OnInit {
     this.bookService.getBooks().subscribe((books: Book[]) => {
       this.books = books;
     });
+  }
+
+  openDialogForDeleting(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: 'Dialog', message: 'Are you sure to delete this item?' }
+    });
+    dialogRef.disableClose = true;
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === dialogRef.componentInstance.ACTION_CONFIRM) {
+        this.bookService.deleteBook(id).subscribe(
+          () => {
+            this.loadBooks();
+
+            this.snackBar.open('The item has been deleted successfully.', 'Close', {
+              duration: 1500
+            });
+          }
+        );
+      }
+    });
+
   }
 
 }
