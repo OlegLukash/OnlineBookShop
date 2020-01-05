@@ -26,7 +26,7 @@ export class EditBookComponent implements OnInit {
     this.bookForm = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       description: ['', Validators.minLength(5)],
-      publishedOn: [new Date(), [Validators.required]],
+      publishedOn: ['', [Validators.required]],
       publisher: ['', [Validators.required]],
       price: ['', [Validators.required]]
     });

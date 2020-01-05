@@ -18,7 +18,6 @@ import {
       MatInputModule,
       MatListModule,
       MatMenuModule,
-      MatNativeDateModule,
       MatPaginatorModule,
       MatProgressBarModule,
       MatProgressSpinnerModule,
@@ -36,6 +35,8 @@ import {
       MatTooltipModule,
 } from '@angular/material';
 
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+
 import {ReactiveFormsModule} from '@angular/forms';
 
 import { AdminComponent } from './admin/admin.component';
@@ -43,7 +44,6 @@ import { BookListComponent } from './books/book-list/book-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditBookComponent } from './books/editBook/editBook.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
-
 
 @NgModule({
   imports: [
@@ -65,7 +65,6 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -82,7 +81,8 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
     MatToolbarModule,
     MatTooltipModule,
 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatMomentDateModule
 
   ],
   entryComponents: [ConfirmDialogComponent],
@@ -93,6 +93,9 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
     BookListComponent,
     EditBookComponent,
     DashboardComponent
+  ],
+  providers: [
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, strict: true}}
   ]
 })
 export class AdminModule { }

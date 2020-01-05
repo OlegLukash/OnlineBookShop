@@ -34,7 +34,7 @@
         </mat-form-field>
 
         <mat-form-field class="form-field-30">
-          <input matInput [matDatepicker]="publishedOnDateId" placeholder="Published On" [value]="book?.publishedOn">
+          <input matInput [matDatepicker]="publishedOnDateId" placeholder="Published On" formControlName="publishedOn">
           <mat-datepicker-toggle matSuffix [for]="publishedOnDateId"></mat-datepicker-toggle>
           <mat-datepicker #publishedOnDateId></mat-datepicker>
         </mat-form-field>
