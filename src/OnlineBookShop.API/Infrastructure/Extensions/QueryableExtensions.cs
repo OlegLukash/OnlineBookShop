@@ -5,12 +5,13 @@ using OnlineBookShop.API.Infrastructure.Models;
 using OnlineBookShop.Domain;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace OnlineBookShop.API.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {
-        public async static Task<PagedResult<TDto>> CreatePagedResultAsync<TEntity, TDto>(this IQueryable<TEntity> query, PagedRequest pagedRequest, IMapper mapper) 
+        public async static Task<PaginatedResult<TDto>> CreatePaginatedResultAsync<TEntity, TDto>(this IQueryable<TEntity> query, PagedRequest pagedRequest, IMapper mapper) 
             where TEntity : BaseEntity                                                                                                                                                
             where TDto: class
         {
@@ -19,10 +20,12 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             query = query.Paginate(pagedRequest);
 
             var projectionResult = query.ProjectTo<TDto>(mapper.ConfigurationProvider);
+
+            projectionResult = projectionResult.Sort(pagedRequest);
             
             var listResult = await projectionResult.ToListAsync();
 
-            return new PagedResult<TDto>() 
+            return new PaginatedResult<TDto>() 
             { 
                 Items = listResult, 
                 PageSize = pagedRequest.PageSize, 
@@ -35,6 +38,15 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
         {
             var entities = query.Skip((pagedRequest.PageIndex) * pagedRequest.PageSize).Take(pagedRequest.PageSize);
             return entities;
+        }
+
+        private static IQueryable<T> Sort<T>(this IQueryable<T> query, PagedRequest pagedRequest)
+        {
+            if (!string.IsNullOrWhiteSpace(pagedRequest.ColumnNameForSorting))
+            {
+                query = query.OrderBy(pagedRequest.ColumnNameForSorting + " " + pagedRequest.SortDirection);
+            }
+            return query;
         }
     }
 }

@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 import { ConfirmDialogComponent } from 'src/app/admin/shared/confirm-dialog.component';
 import { PagedResult } from 'src/app/_infrastructure/models/PagedResult';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
@@ -25,6 +26,7 @@ export class BookListComponent implements AfterViewInit {
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false}) sort: MatSort;
 
   constructor(
     private bookService: BookService,
@@ -35,13 +37,15 @@ export class BookListComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.loadBooksFromApi();
 
-    this.paginator.page.subscribe(() => {
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page).subscribe(() => {
       this.loadBooksFromApi();
     });
-}
+  }
 
   loadBooksFromApi() {
-    this.bookService.getBooksPaged(this.paginator.pageIndex, this.paginator.pageSize)
+    this.bookService.getBooksPaged(this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction)
       .subscribe((pagedBooks: PagedResult<Book>) => {
         this.pagedBooks = pagedBooks;
       });

@@ -65,10 +65,10 @@ namespace OnlineBookShop.API.Repositories.Implementation
             return entity;
         }
 
-        public async Task<PagedResult<TDto>> GetPagedData<TEntity, TDto>(PagedRequest pagedRequest) where TEntity: BaseEntity 
+        public async Task<PaginatedResult<TDto>> GetPagedData<TEntity, TDto>(PagedRequest pagedRequest) where TEntity: BaseEntity 
                                                                                                     where TDto: class
         {
-            return await _onlineBookShopDbContext.Set<TEntity>().CreatePagedResultAsync<TEntity, TDto>(pagedRequest, _mapper);
+            return await _onlineBookShopDbContext.Set<TEntity>().CreatePaginatedResultAsync<TEntity, TDto>(pagedRequest, _mapper);
         }
     }
 }

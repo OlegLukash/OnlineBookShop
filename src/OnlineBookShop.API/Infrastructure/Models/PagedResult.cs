@@ -2,7 +2,7 @@
 
 namespace OnlineBookShop.API.Infrastructure.Models
 {
-    public class PagedResult<T> where T: class
+    public class PaginatedResult<T> where T: class
     {
         public int PageIndex { get; set; }
         public int PageSize { get; set; }

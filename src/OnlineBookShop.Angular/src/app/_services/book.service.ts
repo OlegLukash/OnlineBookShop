@@ -20,11 +20,13 @@ export class BookService {
     return this.http.get<Book[]>(this.baseUrl + 'books');
   }
 
-  getBooksPaged(pageIndex: number, pageSize: number): Observable<PagedResult<Book>> {
+  getBooksPaged(pageIndex: number, pageSize: number, columnNameForSorting: string, sortDirection: string): Observable<PagedResult<Book>> {
     return this.http.get<PagedResult<Book>>(this.baseUrl + 'books', {
       params: new HttpParams()
           .set('pageIndex', pageIndex.toString())
           .set('pageSize', pageSize.toString())
+          .set('columnNameForSorting', columnNameForSorting)
+          .set('sortDirection', sortDirection)
     });
   }
 

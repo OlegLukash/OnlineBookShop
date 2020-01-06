@@ -27,7 +27,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <mat-table #table [dataSource]="pagedBooks?.items" matSort>
+    <mat-table #table [dataSource]="pagedBooks?.items" matSort matSortActive="title" matSortDirection="asc">
      
 	    <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
