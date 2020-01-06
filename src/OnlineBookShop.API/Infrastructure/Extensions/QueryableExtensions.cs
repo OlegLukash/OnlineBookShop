@@ -31,9 +31,9 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             };
         }
 
-        private static IQueryable<T> Paginate<T>(this IQueryable<T> query, PagedRequest pagedRequestDescription)
+        private static IQueryable<T> Paginate<T>(this IQueryable<T> query, PagedRequest pagedRequest)
         {
-            var entities = query.Skip((pagedRequestDescription.PageIndex) * pagedRequestDescription.PageSize).Take(pagedRequestDescription.PageSize);
+            var entities = query.Skip((pagedRequest.PageIndex) * pagedRequest.PageSize).Take(pagedRequest.PageSize);
             return entities;
         }
     }
