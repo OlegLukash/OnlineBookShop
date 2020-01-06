@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Book } from '../_models/Book';
 import { Observable } from 'rxjs';
 import { PagedResult } from '../_infrastructure/models/PagedResult';
+import { PaginatedRequest } from '../_infrastructure/models/PaginatedRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,13 @@ export class BookService {
     return this.http.get<Book[]>(this.baseUrl + 'books');
   }
 
-  getBooksPaged(pageIndex: number, pageSize: number, columnNameForSorting: string, sortDirection: string): Observable<PagedResult<Book>> {
+  getBooksPaged(paginatedRequest: PaginatedRequest): Observable<PagedResult<Book>> {
     return this.http.get<PagedResult<Book>>(this.baseUrl + 'books', {
       params: new HttpParams()
-          .set('pageIndex', pageIndex.toString())
-          .set('pageSize', pageSize.toString())
-          .set('columnNameForSorting', columnNameForSorting)
-          .set('sortDirection', sortDirection)
+          .set('pageIndex', paginatedRequest.pageIndex.toString())
+          .set('pageSize', paginatedRequest.pageSize.toString())
+          .set('columnNameForSorting', paginatedRequest.columnNameForSorting)
+          .set('sortDirection', paginatedRequest.sortDirection)
     });
   }
 

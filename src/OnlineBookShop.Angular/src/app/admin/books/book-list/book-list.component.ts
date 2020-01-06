@@ -13,6 +13,7 @@ import {
 import { ConfirmDialogComponent } from 'src/app/admin/shared/confirm-dialog.component';
 import { PagedResult } from 'src/app/_infrastructure/models/PagedResult';
 import { merge } from 'rxjs';
+import { PaginatedRequest } from 'src/app/_infrastructure/models/PaginatedRequest';
 
 @Component({
   selector: 'app-book-list',
@@ -45,7 +46,8 @@ export class BookListComponent implements AfterViewInit {
   }
 
   loadBooksFromApi() {
-    this.bookService.getBooksPaged(this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction)
+    const paginatedRequest = new PaginatedRequest(this.paginator, this.sort);
+    this.bookService.getBooksPaged(paginatedRequest)
       .subscribe((pagedBooks: PagedResult<Book>) => {
         this.pagedBooks = pagedBooks;
       });
