@@ -26,14 +26,14 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             { 
                 Items = listResult, 
                 PageSize = pagedRequest.PageSize, 
-                PageNumber = pagedRequest.PageNumber, 
+                PageIndex = pagedRequest.PageIndex, 
                 Total = total 
             };
         }
 
         private static IQueryable<T> Paginate<T>(this IQueryable<T> query, PagedRequest pagedRequestDescription)
         {
-            var entities = query.Skip((pagedRequestDescription.PageNumber - 1) * pagedRequestDescription.PageSize).Take(pagedRequestDescription.PageSize);
+            var entities = query.Skip((pagedRequestDescription.PageIndex) * pagedRequestDescription.PageSize).Take(pagedRequestDescription.PageSize);
             return entities;
         }
     }

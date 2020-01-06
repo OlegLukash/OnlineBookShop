@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
 import { Book } from '../../../_models/Book';
 import { BookService } from '../../../_services/book.service';
@@ -11,17 +11,20 @@ import {
   MatSort
 } from '@angular/material';
 import { ConfirmDialogComponent } from 'src/app/admin/shared/confirm-dialog.component';
+import { PagedResult } from 'src/app/_infrastructure/models/PagedResult';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements AfterViewInit {
 
-  books: Book[] = [];
+  pagedBooks: PagedResult<Book>;
 
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
+
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(
     private bookService: BookService,
@@ -29,14 +32,19 @@ export class BookListComponent implements OnInit {
     public snackBar: MatSnackBar
   ) { }
 
-  ngOnInit() {
-    this.loadBooks();
-  }
+  ngAfterViewInit() {
+    this.loadBooksFromApi();
 
-  loadBooks() {
-    this.bookService.getBooks().subscribe((books: Book[]) => {
-      this.books = books;
+    this.paginator.page.subscribe(() => {
+      this.loadBooksFromApi();
     });
+}
+
+  loadBooksFromApi() {
+    this.bookService.getBooksPaged(this.paginator.pageIndex, this.paginator.pageSize)
+      .subscribe((pagedBooks: PagedResult<Book>) => {
+        this.pagedBooks = pagedBooks;
+      });
   }
 
   openDialogForDeleting(id: number) {
@@ -49,7 +57,7 @@ export class BookListComponent implements OnInit {
       if (result === dialogRef.componentInstance.ACTION_CONFIRM) {
         this.bookService.deleteBook(id).subscribe(
           () => {
-            this.loadBooks();
+            this.loadBooksFromApi();
 
             this.snackBar.open('The item has been deleted successfully.', 'Close', {
               duration: 1500
