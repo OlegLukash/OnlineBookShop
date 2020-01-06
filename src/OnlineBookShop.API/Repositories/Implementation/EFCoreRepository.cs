@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using OnlineBookShop.API.Infrastructure.Extensions;
+using OnlineBookShop.API.Infrastructure.Models;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain;
 using System;
@@ -10,10 +13,12 @@ namespace OnlineBookShop.API.Repositories.Implementation
     public class EFCoreRepository: IRepository
     {
         private readonly OnlineBookShopDbContext _onlineBookShopDbContext;
+        private readonly IMapper _mapper;
 
-        public EFCoreRepository(OnlineBookShopDbContext onlineBookShopDbContext)
+        public EFCoreRepository(OnlineBookShopDbContext onlineBookShopDbContext, IMapper mapper)
         {
             _onlineBookShopDbContext = onlineBookShopDbContext;
+            _mapper = mapper;
         }
 
         public async Task<List<TEntity>> GetAll<TEntity>() where TEntity : BaseEntity
@@ -58,6 +63,12 @@ namespace OnlineBookShop.API.Repositories.Implementation
             await _onlineBookShopDbContext.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<PagedResult<TDto>> GetPagedData<TEntity, TDto>(PagedRequest pagedRequest) where TEntity: BaseEntity 
+                                                                                                    where TDto: class
+        {
+            return await _onlineBookShopDbContext.Set<TEntity>().CreatePagedResultAsync<TEntity, TDto>(pagedRequest, _mapper);
         }
     }
 }

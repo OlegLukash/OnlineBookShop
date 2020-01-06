@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineBookShop.API.Dtos.Books;
+using OnlineBookShop.API.Infrastructure.Models;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Controllers
@@ -22,11 +22,10 @@ namespace OnlineBookShop.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBooks()
+        public async Task<IActionResult> GetPagedBooks([FromQuery]PagedRequest pagedRequest)
         {
-            var books = await _repository.GetAll<Book>();
-            var bookDtos = _mapper.Map<List<BookDto>>(books);
-            return Ok(bookDtos);
+            var pagedBooksDto = await _repository.GetPagedData<Book, BookDto>(pagedRequest);
+            return Ok(pagedBooksDto);  
         }
 
         [HttpGet("{id}")]
