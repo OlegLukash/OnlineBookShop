@@ -21,8 +21,8 @@ namespace OnlineBookShop.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPagedBooks([FromQuery]PagedRequest pagedRequest)
+        [HttpPost("PaginatedSearch")]
+        public async Task<IActionResult> GetPagedBooks([FromBody]PagedRequest pagedRequest)
         {
             var pagedBooksDto = await _repository.GetPagedData<Book, BookDto>(pagedRequest);
             return Ok(pagedBooksDto);  

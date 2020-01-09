@@ -22,13 +22,7 @@ export class BookService {
   }
 
   getBooksPaged(paginatedRequest: PaginatedRequest): Observable<PagedResult<Book>> {
-    return this.http.get<PagedResult<Book>>(this.baseUrl + 'books', {
-      params: new HttpParams()
-          .set('pageIndex', paginatedRequest.pageIndex.toString())
-          .set('pageSize', paginatedRequest.pageSize.toString())
-          .set('columnNameForSorting', paginatedRequest.columnNameForSorting)
-          .set('sortDirection', paginatedRequest.sortDirection)
-    });
+    return this.http.post<PagedResult<Book>>(this.baseUrl + 'books/paginatedSearch', paginatedRequest);
   }
 
   getBook(id: number): Observable<Book> {

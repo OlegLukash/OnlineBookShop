@@ -12,7 +12,7 @@
             <mat-icon>subject</mat-icon>
             <b> Filter</b>
           </mat-placeholder>
-          <input matInput (keyup)="applyFilter($event.target.value)">
+          <input matInput [formControl]="globalFilterInput" (keyup.enter)="applyFilter()">
         </mat-form-field>
         <span class="title-spacer"></span>
         <button mat-mini-fab style="margin-right:10px; background-color:#e07c9e" [routerLink]="['/admin/editBook', 0]">

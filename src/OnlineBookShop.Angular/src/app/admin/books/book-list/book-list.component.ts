@@ -14,6 +14,8 @@ import { ConfirmDialogComponent } from 'src/app/admin/shared/confirm-dialog.comp
 import { PagedResult } from 'src/app/_infrastructure/models/PagedResult';
 import { merge } from 'rxjs';
 import { PaginatedRequest } from 'src/app/_infrastructure/models/PaginatedRequest';
+import { Filter } from 'src/app/_infrastructure/models/Filter';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-book-list',
@@ -25,6 +27,9 @@ export class BookListComponent implements AfterViewInit {
   pagedBooks: PagedResult<Book>;
 
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
+  columnsForGlobalFiltering: string[] = ['title', 'publisher'];
+
+  globalFilterInput = new FormControl('');
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false}) sort: MatSort;
@@ -46,7 +51,8 @@ export class BookListComponent implements AfterViewInit {
   }
 
   loadBooksFromApi() {
-    const paginatedRequest = new PaginatedRequest(this.paginator, this.sort);
+    const filters = this.createFilters();
+    const paginatedRequest = new PaginatedRequest(this.paginator, this.sort, filters);
     this.bookService.getBooksPaged(paginatedRequest)
       .subscribe((pagedBooks: PagedResult<Book>) => {
         this.pagedBooks = pagedBooks;
@@ -73,6 +79,20 @@ export class BookListComponent implements AfterViewInit {
       }
     });
 
+  }
+
+  applyFilter() {
+    this.loadBooksFromApi();
+  }
+
+  private createFilters(): Filter[] {
+    const filterValue = this.globalFilterInput.value.trim(); // Remove whitespace
+    const filters: Filter[] = [];
+    this.columnsForGlobalFiltering.forEach(columnName => {
+      const filter: Filter = { property : columnName, value : filterValue };
+      filters.push(filter);
+    });
+    return filters;
   }
 
 }

@@ -17,6 +17,8 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
         {
             var total = await query.CountAsync();
 
+            query = query.ApplyFilters(pagedRequest);
+
             query = query.Paginate(pagedRequest);
 
             var projectionResult = query.ProjectTo<TDto>(mapper.ConfigurationProvider);
@@ -46,6 +48,29 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             {
                 query = query.OrderBy(pagedRequest.ColumnNameForSorting + " " + pagedRequest.SortDirection);
             }
+            return query;
+        }
+
+        private static IQueryable<T> ApplyFilters<T>(this IQueryable<T> query, PagedRequest pagedRequest)
+        {
+            var predicate = "";
+
+            for (int i = 0; i < pagedRequest.Filters.Count; i++)
+            {
+                if (i > 0)
+                {
+                    predicate += " OR ";
+                }
+                predicate = predicate + pagedRequest.Filters[i].Property + $".Contains(@{i})";
+            }
+
+            if (pagedRequest.Filters.Any())
+            {
+                var propertyValues = pagedRequest.Filters.Select(filter => filter.Value).ToArray();
+
+                query = query.Where(predicate, propertyValues);
+            }
+
             return query;
         }
     }
