@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using OnlineBookShop.API.Infrastructure.Extensions;
 
 namespace OnlineBookShop.API
 {
@@ -7,7 +8,10 @@ namespace OnlineBookShop.API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .SeedData()
+                .Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
