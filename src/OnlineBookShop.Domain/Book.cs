@@ -11,9 +11,9 @@ namespace OnlineBookShop.Domain
 
         public DateTime PublishedOn { get; set; }
 
-        public string Publisher { get; set; }
-
         public decimal Price { get; set; }
+
+        public virtual Publisher Publisher { get; set; }
 
         public virtual PriceOffer PriceOffer { get; set; }
 

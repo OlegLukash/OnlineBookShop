@@ -17,6 +17,7 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                 {
                     var context = services.GetRequiredService<OnlineBookShopDbContext>();
                     context.Database.Migrate();
+                    Seed.SeedPublishers(context);
                     Seed.SeedBooks(context);
                 }
                 catch (Exception ex)

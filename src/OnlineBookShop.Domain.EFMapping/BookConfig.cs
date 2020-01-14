@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 
 namespace OnlineBookShop.Domain.EFMapping
 {
@@ -14,9 +13,6 @@ namespace OnlineBookShop.Domain.EFMapping
 
             builder.Property(x => x.PublishedOn)
                 .HasColumnType("date")
-                .IsRequired();
-
-            builder.Property(x => x.Publisher)
                 .IsRequired();
 
             builder.HasMany(x => x.Reviews)
