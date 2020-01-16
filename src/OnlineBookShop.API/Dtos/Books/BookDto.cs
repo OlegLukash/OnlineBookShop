@@ -12,7 +12,7 @@ namespace OnlineBookShop.API.Dtos.Books
 
         public DateTime PublishedOn { get; set; }
 
-        public string Publisher { get; set; }
+        public int PublisherId { get; set; }
 
         public decimal Price { get; set; }
     }

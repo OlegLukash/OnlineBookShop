@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Book } from '../_models/Book';
+import { Book } from '../_models/Books/Book';
+import { BookGridRow } from '../_models/Books/BookGridRow';
 import { Observable } from 'rxjs';
 import { PagedResult } from '../_infrastructure/models/PagedResult';
 import { PaginatedRequest } from '../_infrastructure/models/PaginatedRequest';
@@ -21,8 +22,14 @@ export class BookService {
     return this.http.get<Book[]>(this.baseUrl + 'books');
   }
 
-  getBooksPaged(paginatedRequest: PaginatedRequest): Observable<PagedResult<Book>> {
-    return this.http.post<PagedResult<Book>>(this.baseUrl + 'books/paginatedSearch', paginatedRequest);
+  getBooksPaged(paginatedRequest: PaginatedRequest): Observable<PagedResult<BookGridRow>> {
+      return this.http.get<PagedResult<BookGridRow>>(this.baseUrl + 'paginatedSearch', {
+      params: new HttpParams()
+          .set('pageIndex', paginatedRequest.pageIndex.toString())
+          .set('pageSize', paginatedRequest.pageSize.toString())
+          .set('columnNameForSorting', paginatedRequest.columnNameForSorting)
+          .set('sortDirection', paginatedRequest.sortDirection)
+    });
   }
 
   getBook(id: number): Observable<Book> {

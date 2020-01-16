@@ -1,6 +1,8 @@
 ﻿using OnlineBookShop.API.Infrastructure.Models;
 using OnlineBookShop.Domain;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Repositories.Interfaces
@@ -8,6 +10,8 @@ namespace OnlineBookShop.API.Repositories.Interfaces
     public interface IRepository 
     {
         Task<TEntity> GetById<TEntity>(int id) where TEntity : BaseEntity;
+
+        Task<TEntity> GetByIdWithInclude<TEntity>(int id, params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : BaseEntity;
 
         Task<List<TEntity>> GetAll<TEntity>() where TEntity : BaseEntity;
 

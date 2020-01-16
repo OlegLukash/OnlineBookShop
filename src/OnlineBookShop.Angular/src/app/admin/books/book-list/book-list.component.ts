@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
-import { Book } from '../../../_models/Book';
+import { BookGridRow } from '../../../_models/Books/BookGridRow';
 import { BookService } from '../../../_services/book.service';
 
 import {
@@ -24,7 +24,7 @@ import { FormControl } from '@angular/forms';
 })
 export class BookListComponent implements AfterViewInit {
 
-  pagedBooks: PagedResult<Book>;
+  pagedBooks: PagedResult<BookGridRow>;
 
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
   columnsForGlobalFiltering: string[] = ['title', 'publisher'];
@@ -54,7 +54,7 @@ export class BookListComponent implements AfterViewInit {
     const filters = this.createFilters();
     const paginatedRequest = new PaginatedRequest(this.paginator, this.sort, filters);
     this.bookService.getBooksPaged(paginatedRequest)
-      .subscribe((pagedBooks: PagedResult<Book>) => {
+      .subscribe((pagedBooks: PagedResult<BookGridRow>) => {
         this.pagedBooks = pagedBooks;
       });
   }
