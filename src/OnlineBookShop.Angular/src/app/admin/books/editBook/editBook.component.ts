@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from 'src/app/_services/book.service';
-import { Book } from 'src/app/_models/Book';
+import { Book } from 'src/app/_models/Books/Book';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { PublisherService } from 'src/app/_services/publisher.service';
+import { Publisher } from 'src/app/_models/Publishers/Publisher';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-editBook',
@@ -12,13 +15,15 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class EditBookComponent implements OnInit {
 
   public book: Book;
+  public publishers: Publisher[];
   public bookForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private bookService: BookService
+    private bookService: BookService,
+    private publisherService: PublisherService
   ) { }
 
   ngOnInit() {
@@ -27,14 +32,21 @@ export class EditBookComponent implements OnInit {
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       description: ['', Validators.minLength(5)],
       publishedOn: ['', [Validators.required]],
-      publisher: ['', [Validators.required]],
+      publisherId: ['', [Validators.required]],
       price: ['', [Validators.required]]
     });
 
+    this.getAllPublishers();
 
     this.route.params.subscribe(params => {
       const id = +params['id'];
       this.getBook(id);
+    });
+  }
+
+  getAllPublishers(): void {
+    this.publisherService.getAllPublishers().subscribe((publishers: Publisher[]) => {
+      this.publishers = _.orderBy(publishers, 'name');
     });
   }
 
@@ -45,7 +57,7 @@ export class EditBookComponent implements OnInit {
         title: this.book.title,
         description: this.book.description,
         publishedOn: this.book.publishedOn,
-        publisher: this.book.publisher,
+        publisherId: this.book.publisherId,
         price: this.book.price
       });
 

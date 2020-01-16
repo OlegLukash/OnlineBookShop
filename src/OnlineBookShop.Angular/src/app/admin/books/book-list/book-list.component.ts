@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
-import { Book } from '../../../_models/Book';
+import { BookGridRow } from '../../../_models/Books/BookGridRow';
 import { BookService } from '../../../_services/book.service';
 
 import {
@@ -22,7 +22,7 @@ import { PaginatedRequest } from 'src/app/_infrastructure/models/PaginatedReques
 })
 export class BookListComponent implements AfterViewInit {
 
-  pagedBooks: PagedResult<Book>;
+  pagedBooks: PagedResult<BookGridRow>;
 
   displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
 
@@ -48,7 +48,7 @@ export class BookListComponent implements AfterViewInit {
   loadBooksFromApi() {
     const paginatedRequest = new PaginatedRequest(this.paginator, this.sort);
     this.bookService.getBooksPaged(paginatedRequest)
-      .subscribe((pagedBooks: PagedResult<Book>) => {
+      .subscribe((pagedBooks: PagedResult<BookGridRow>) => {
         this.pagedBooks = pagedBooks;
       });
   }

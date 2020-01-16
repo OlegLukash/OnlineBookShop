@@ -1,4 +1,4 @@
-export interface Book {
+export interface BookGridRow {
      id: number;
      title: string;
      description: string;

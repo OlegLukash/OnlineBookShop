@@ -30,7 +30,11 @@
         </mat-form-field>
 
         <mat-form-field class="form-field-30">
-          <input matInput placeholder="Publisher" type="text" placeholder="Publisher (required)" formControlName="publisher"/>
+          <mat-select placeholder="Select Publisher" formControlName="publisherId" [(value)]="book.publisherId">
+            <mat-option *ngFor="let publisher of publishers" [value]="publisher.id">
+              {{publisher.name}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field class="form-field-30">

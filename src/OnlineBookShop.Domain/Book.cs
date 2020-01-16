@@ -13,6 +13,8 @@ namespace OnlineBookShop.Domain
 
         public decimal Price { get; set; }
 
+        public int PublisherId { get; set; }
+
         public virtual Publisher Publisher { get; set; }
 
         public virtual PriceOffer PriceOffer { get; set; }

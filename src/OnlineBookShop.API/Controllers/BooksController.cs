@@ -24,14 +24,14 @@ namespace OnlineBookShop.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPagedBooks([FromQuery]PagedRequest pagedRequest)
         {
-            var pagedBooksDto = await _repository.GetPagedData<Book, BookDto>(pagedRequest);
+            var pagedBooksDto = await _repository.GetPagedData<Book, BookGridRowDto>(pagedRequest);
             return Ok(pagedBooksDto);  
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(int id)
         {
-            var book = await _repository.GetById<Book>(id);
+            var book = await _repository.GetByIdWithInclude<Book>(id, book => book.Publisher);
             var bookDto = _mapper.Map<BookDto>(book);
             return Ok(bookDto);
         }
