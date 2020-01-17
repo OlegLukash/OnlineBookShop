@@ -61,7 +61,7 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                 {
                     predicate += " OR ";
                 }
-                predicate = predicate + pagedRequest.Filters[i].Property + $".Contains(@{i})";
+                predicate = predicate + pagedRequest.Filters[i].Path + $".Contains(@{i})";
             }
 
             if (pagedRequest.Filters.Any())

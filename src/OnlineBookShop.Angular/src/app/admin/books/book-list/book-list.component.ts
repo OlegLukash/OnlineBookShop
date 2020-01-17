@@ -16,6 +16,7 @@ import { merge } from 'rxjs';
 import { PaginatedRequest } from 'src/app/_infrastructure/models/PaginatedRequest';
 import { Filter } from 'src/app/_infrastructure/models/Filter';
 import { FormControl } from '@angular/forms';
+import { TableColumn } from 'src/app/_infrastructure/models/TableColumn';
 
 @Component({
   selector: 'app-book-list',
@@ -26,8 +27,15 @@ export class BookListComponent implements AfterViewInit {
 
   pagedBooks: PagedResult<BookGridRow>;
 
-  displayedColumns: string[] = ['title', 'publisher', 'publishedOn', 'price', 'id'];
-  columnsForGlobalFiltering: string[] = ['title', 'publisher'];
+  tableColumns: TableColumn[] = [
+    { name: 'title', index: 'title', useInGlobalFiltering: true },
+    { name: 'publisher', index: 'publisher.name', useInGlobalFiltering: true },
+    { name: 'publishedOn', index: 'publishedOn' },
+    { name: 'price', index: 'price' },
+    { name: 'id', index: 'id' }
+  ];
+
+  displayedColumns: string[];
 
   globalFilterInput = new FormControl('');
 
@@ -38,7 +46,9 @@ export class BookListComponent implements AfterViewInit {
     private bookService: BookService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
-  ) { }
+  ) {
+    this.displayedColumns = this.tableColumns.map(column => column.name);
+  }
 
   ngAfterViewInit() {
     this.loadBooksFromApi();
@@ -86,13 +96,17 @@ export class BookListComponent implements AfterViewInit {
   }
 
   private createFilters(): Filter[] {
-    const filterValue = this.globalFilterInput.value.trim(); // Remove whitespace
-    const filters: Filter[] = [];
-    this.columnsForGlobalFiltering.forEach(columnName => {
-      const filter: Filter = { property : columnName, value : filterValue };
-      filters.push(filter);
-    });
-    return filters;
+    const filterValue = this.globalFilterInput.value.trim();
+    if (filterValue) {
+      const filters: Filter[] = [];
+      this.tableColumns.forEach(column => {
+        if (column.useInGlobalFiltering) {
+          const filter: Filter = { path : column.index, value : filterValue };
+          filters.push(filter);
+        }
+      });
+      return filters;
+    }
   }
 
 }

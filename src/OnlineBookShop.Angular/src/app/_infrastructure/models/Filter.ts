@@ -1,4 +1,4 @@
 export interface Filter {
-    property: string;
+    path: string;
     value: string;
 }
