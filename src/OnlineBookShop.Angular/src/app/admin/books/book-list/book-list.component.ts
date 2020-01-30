@@ -15,8 +15,10 @@ import { PagedResult } from 'src/app/_infrastructure/models/PagedResult';
 import { merge } from 'rxjs';
 import { PaginatedRequest } from 'src/app/_infrastructure/models/PaginatedRequest';
 import { Filter } from 'src/app/_infrastructure/models/Filter';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { TableColumn } from 'src/app/_infrastructure/models/TableColumn';
+import { RequestFilters } from 'src/app/_infrastructure/models/RequestFilters';
+import { FilterLogicalOperators } from 'src/app/_infrastructure/models/FilterLogicalOperators';
 
 @Component({
   selector: 'app-book-list',
@@ -28,26 +30,34 @@ export class BookListComponent implements AfterViewInit {
   pagedBooks: PagedResult<BookGridRow>;
 
   tableColumns: TableColumn[] = [
-    { name: 'title', index: 'title', useInGlobalFiltering: true },
-    { name: 'publisher', index: 'publisher.name', useInGlobalFiltering: true },
-    { name: 'publishedOn', index: 'publishedOn' },
-    { name: 'price', index: 'price' },
-    { name: 'id', index: 'id' }
+    { name: 'title', index: 'title', displayName: 'Title', useInSearch: true },
+    { name: 'publisher', index: 'publisher.name', displayName: 'Publisher', useInSearch: true },
+    { name: 'publishedOn', index: 'publishedOn', displayName: 'Published On' },
+    { name: 'price', index: 'price', displayName: 'Price' },
+    { name: 'id', index: 'id', displayName: 'Id' }
   ];
 
   displayedColumns: string[];
 
-  globalFilterInput = new FormControl('');
+  searchInput = new FormControl('');
+  filterForm: FormGroup;
+
+  requestFilters: RequestFilters;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false}) sort: MatSort;
 
   constructor(
     private bookService: BookService,
+    private formBuilder: FormBuilder,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {
     this.displayedColumns = this.tableColumns.map(column => column.name);
+    this.filterForm = this.formBuilder.group({
+      title: [''],
+      publisher: ['']
+    });
   }
 
   ngAfterViewInit() {
@@ -61,8 +71,7 @@ export class BookListComponent implements AfterViewInit {
   }
 
   loadBooksFromApi() {
-    const filters = this.createFilters();
-    const paginatedRequest = new PaginatedRequest(this.paginator, this.sort, filters);
+    const paginatedRequest = new PaginatedRequest(this.paginator, this.sort, this.requestFilters);
     this.bookService.getBooksPaged(paginatedRequest)
       .subscribe((pagedBooks: PagedResult<BookGridRow>) => {
         this.pagedBooks = pagedBooks;
@@ -91,21 +100,56 @@ export class BookListComponent implements AfterViewInit {
 
   }
 
-  applyFilter() {
+  applySearch() {
+    this.createFiltersFromSearchInput();
     this.loadBooksFromApi();
   }
 
-  private createFilters(): Filter[] {
-    const filterValue = this.globalFilterInput.value.trim();
+  resetGrid() {
+    this.requestFilters = {filters: [], logicalOperator: FilterLogicalOperators.And};
+    this.loadBooksFromApi();
+  }
+
+  filterBooksFromForm() {
+    this.createFiltersFromForm();
+    this.loadBooksFromApi();
+  }
+
+  private createFiltersFromForm() {
+    if (this.filterForm.value) {
+      const filters: Filter[] = [];
+
+      Object.keys(this.filterForm.controls).forEach(key => {
+        const controlValue = this.filterForm.controls[key].value;
+        if (controlValue) {
+          const filter: Filter = { path : key, value : controlValue };
+          filters.push(filter);
+        }
+      });
+
+      this.requestFilters = {
+        logicalOperator: FilterLogicalOperators.And,
+        filters
+      };
+    }
+  }
+
+  private createFiltersFromSearchInput() {
+    const filterValue = this.searchInput.value.trim();
     if (filterValue) {
       const filters: Filter[] = [];
       this.tableColumns.forEach(column => {
-        if (column.useInGlobalFiltering) {
+        if (column.useInSearch) {
           const filter: Filter = { path : column.index, value : filterValue };
           filters.push(filter);
         }
       });
-      return filters;
+      this.requestFilters = {
+        logicalOperator: FilterLogicalOperators.Or,
+        filters
+      };
+    } else {
+      this.resetGrid();
     }
   }
 

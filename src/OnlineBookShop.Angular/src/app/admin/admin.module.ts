@@ -88,7 +88,6 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog.component';
   entryComponents: [ConfirmDialogComponent],
   declarations: [
     ConfirmDialogComponent,
-    
     AdminComponent,
     BookListComponent,
     EditBookComponent,

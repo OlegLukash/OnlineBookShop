@@ -15,9 +15,9 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             where TEntity : BaseEntity                                                                                                                                                
             where TDto: class
         {
-            var total = await query.CountAsync();
-
             query = query.ApplyFilters(pagedRequest);
+
+            var total = await query.CountAsync();
 
             query = query.Paginate(pagedRequest);
 
@@ -54,19 +54,19 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
         private static IQueryable<T> ApplyFilters<T>(this IQueryable<T> query, PagedRequest pagedRequest)
         {
             var predicate = "";
-
-            for (int i = 0; i < pagedRequest.Filters.Count; i++)
+            var requestFilters = pagedRequest.RequestFilters;
+            for (int i = 0; i < requestFilters.Filters.Count; i++)
             {
                 if (i > 0)
                 {
-                    predicate += " OR ";
+                    predicate += $" {requestFilters.LogicalOperator} ";
                 }
-                predicate = predicate + pagedRequest.Filters[i].Path + $".Contains(@{i})";
+                predicate = predicate + requestFilters.Filters[i].Path + $".Contains(@{i})";
             }
 
-            if (pagedRequest.Filters.Any())
+            if (requestFilters.Filters.Any())
             {
-                var propertyValues = pagedRequest.Filters.Select(filter => filter.Value).ToArray();
+                var propertyValues = requestFilters.Filters.Select(filter => filter.Value).ToArray();
 
                 query = query.Where(predicate, propertyValues);
             }

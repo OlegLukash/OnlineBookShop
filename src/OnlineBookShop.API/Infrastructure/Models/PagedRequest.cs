@@ -6,7 +6,7 @@ namespace OnlineBookShop.API.Infrastructure.Models
     {
         public PagedRequest()
         {
-            Filters = new List<Filter>();
+            RequestFilters = new RequestFilters();
         }
 
         public int PageIndex { get; set; }
@@ -17,6 +17,6 @@ namespace OnlineBookShop.API.Infrastructure.Models
 
         public string SortDirection { get; set; }
 
-        public IList<Filter> Filters { get; set; }
+        public RequestFilters RequestFilters { get; set; }   
     }
 }
