@@ -1,13 +1,12 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title class="view-card-title">
-      <h1>Edit Book</h1>
+      <h1>{{pageTitle}}</h1>
     </mat-card-title>
   </mat-card-header>
   <form novalidate [formGroup]="bookForm" (ngSubmit)="saveBook()">
     <mat-toolbar style="background-color: #FFF">
       <mat-toolbar-row>
-        <!-- <span class="view-card-title"> {{pageTitle}}</span> -->
         <span class="title-spacer"></span>
 
         <mat-card-actions>
@@ -30,7 +29,7 @@
         </mat-form-field>
 
         <mat-form-field class="form-field-30">
-          <mat-select placeholder="Select Publisher" formControlName="publisherId" [(value)]="book.publisherId">
+          <mat-select placeholder="Select Publisher" formControlName="publisherId">
             <mat-option *ngFor="let publisher of publishers" [value]="publisher.id">
               {{publisher.name}}
             </mat-option>

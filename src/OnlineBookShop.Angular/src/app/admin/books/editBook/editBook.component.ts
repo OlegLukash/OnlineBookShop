@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 })
 export class EditBookComponent implements OnInit {
 
+  public pageTitle: string;
   public book: Book;
   public publishers: Publisher[];
   public bookForm: FormGroup;
@@ -40,7 +41,12 @@ export class EditBookComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       const id = +params['id'];
-      this.getBook(id);
+      if (id === 0) {
+        this.pageTitle = 'Add Book:';
+      } else {
+        this.getBook(id);
+        this.pageTitle = 'Edit Book:';
+      }
     });
   }
 
@@ -60,7 +66,6 @@ export class EditBookComponent implements OnInit {
         publisherId: this.book.publisherId,
         price: this.book.price
       });
-
     });
   }
 
