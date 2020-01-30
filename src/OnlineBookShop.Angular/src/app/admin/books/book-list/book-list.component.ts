@@ -122,7 +122,8 @@ export class BookListComponent implements AfterViewInit {
       Object.keys(this.filterForm.controls).forEach(key => {
         const controlValue = this.filterForm.controls[key].value;
         if (controlValue) {
-          const filter: Filter = { path : key, value : controlValue };
+          const foundTableColumn = this.tableColumns.find(tableColumn => tableColumn.name === key);
+          const filter: Filter = { path : foundTableColumn.index, value : controlValue };
           filters.push(filter);
         }
       });

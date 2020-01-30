@@ -88,7 +88,7 @@
       </mat-card-header>
     </mat-card>
     <mat-nav-list style="margin-left:20px;">
-      <form novalidate [formGroup]="filterForm" (ngSubmit)="sidenav.toggle()">
+      <form [formGroup]="filterForm" (ngSubmit)="sidenav.toggle()">
         <mat-form-field>
           <input matInput type="text" placeholder="Title" style="width:200px;" formControlName="title" (keyup.enter)="filterBooksFromForm();sidenav.toggle()"  />
         </mat-form-field>
