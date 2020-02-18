@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineBookShop.API.Repositories.Implementation;
 using OnlineBookShop.API.Repositories.Interfaces;
+using OnlineBookShop.Domain.Auth;
 using System.Reflection;
 
 namespace OnlineBookShop.API
@@ -27,6 +28,10 @@ namespace OnlineBookShop.API
             {
                 optionBuilder.UseSqlServer(Configuration.GetConnectionString("OnlineBookShopConnection"));
             });
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<OnlineBookShopDbContext>();
+
             services.AddControllers();
 
             services.AddScoped<IRepository, EFCoreRepository>();
@@ -42,7 +47,7 @@ namespace OnlineBookShop.API
             }
 
             app.UseRouting();
-
+                        
             app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();
