@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineBookShop.API.Infrastructure.Extensions;
 using OnlineBookShop.API.Repositories.Implementation;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain.Auth;
 using System.Reflection;
+using System.Text;
 
 namespace OnlineBookShop.API
 {
@@ -24,7 +26,7 @@ namespace OnlineBookShop.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<OnlineBookShopDbContext>(optionBuilder => 
+            services.AddDbContext<OnlineBookShopDbContext>(optionBuilder =>
             {
                 optionBuilder.UseSqlServer(Configuration.GetConnectionString("OnlineBookShopConnection"));
             });
@@ -32,6 +34,7 @@ namespace OnlineBookShop.API
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<OnlineBookShopDbContext>();
 
+            services.AddJwtAuthentication(Configuration.GetSection("AppSettings:Token").Value);
             services.AddControllers();
 
             services.AddScoped<IRepository, EFCoreRepository>();
@@ -47,10 +50,11 @@ namespace OnlineBookShop.API
             }
 
             app.UseRouting();
-                        
-            app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
