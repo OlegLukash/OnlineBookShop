@@ -9,7 +9,7 @@ namespace OnlineBookShop.API
 {
     public class Seed
     {
-        public static void SeedBooks(OnlineBookShopDbContext context)
+        public static async Task SeedBooks(OnlineBookShopDbContext context)
         {
             if (!context.Books.Any())
             {
@@ -84,11 +84,11 @@ namespace OnlineBookShop.API
                 context.Books.Add(buildingMicroservices);
                 context.Books.Add(concurrency);
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
-        public static void SeedPublishers(OnlineBookShopDbContext context)
+        public static async Task SeedPublishers(OnlineBookShopDbContext context)
         {
             if (!context.Publishers.Any())
             {
@@ -123,7 +123,7 @@ namespace OnlineBookShop.API
                 context.Publishers.Add(oReillyMedia);
                 context.Publishers.Add(packtPublishing);
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 

@@ -22,8 +22,8 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     context.Database.Migrate();
                     
-                    Seed.SeedPublishers(context);
-                    Seed.SeedBooks(context);
+                    await Seed.SeedPublishers(context);
+                    await Seed.SeedBooks(context);
                     await Seed.SeedUsers(userManager);
                 }
                 catch (Exception ex)
