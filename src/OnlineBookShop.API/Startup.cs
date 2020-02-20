@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,12 +31,18 @@ namespace OnlineBookShop.API
                 optionBuilder.UseSqlServer(Configuration.GetConnectionString("OnlineBookShopConnection"));
             });
 
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<OnlineBookShopDbContext>();
+            services.AddIdentity<User, Role>(options => 
+            {
+                options.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<OnlineBookShopDbContext>();
 
             var authOptions = services.ConfigureAuthOptions(Configuration);
             services.AddJwtAuthentication(authOptions);
-            services.AddControllers();
+            services.AddControllers(options => 
+            {
+                options.Filters.Add(new AuthorizeFilter());
+            });
 
             services.AddScoped<IRepository, EFCoreRepository>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

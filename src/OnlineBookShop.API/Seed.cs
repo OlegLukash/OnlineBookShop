@@ -1,6 +1,9 @@
-﻿using OnlineBookShop.Domain;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlineBookShop.Domain;
+using OnlineBookShop.Domain.Auth;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineBookShop.API
 {
@@ -121,6 +124,20 @@ namespace OnlineBookShop.API
                 context.Publishers.Add(packtPublishing);
 
                 context.SaveChanges();
+            }
+        }
+
+        public static async Task SeedUsers(UserManager<User> userManager)
+        {
+            if (!userManager.Users.Any())
+            {
+                var user = new User()
+                {
+                    UserName = "admin",
+                    Email = "admin@onlinebookshop.com",
+                };
+
+                await userManager.CreateAsync(user, "Qwerty1!");
             }
         }
     }

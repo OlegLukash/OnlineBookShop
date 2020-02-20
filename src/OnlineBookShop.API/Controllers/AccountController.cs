@@ -13,7 +13,6 @@ namespace OnlineBookShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly AuthOptions _authenticationOptions;
@@ -22,6 +21,7 @@ namespace OnlineBookShop.API.Controllers
             _authenticationOptions = authenticationOptions.Value;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login(UserForLoginDto userForLoginDto)
         {

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineBookShop.API.Dtos.Books;
 using OnlineBookShop.API.Infrastructure.Models;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase

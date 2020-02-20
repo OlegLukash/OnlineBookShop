@@ -1,14 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OnlineBookShop.Domain.Auth;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Infrastructure.Extensions
 {
     public static class HostExtensions
     {
-        public static IHost SeedData(this IHost host)
+        public static async Task SeedData(this IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -16,9 +19,12 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                 try
                 {
                     var context = services.GetRequiredService<OnlineBookShopDbContext>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
                     context.Database.Migrate();
+                    
                     Seed.SeedPublishers(context);
                     Seed.SeedBooks(context);
+                    await Seed.SeedUsers(userManager);
                 }
                 catch (Exception ex)
                 {
@@ -26,8 +32,6 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                     logger.LogError(ex, "An error occured during migration");
                 }
             }
-
-            return host;
         }
     }
 }

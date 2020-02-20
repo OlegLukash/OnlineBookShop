@@ -34,7 +34,7 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
 
         public static AuthOptions ConfigureAuthOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            IConfigurationSection authOptionsConfigurationSection = configuration.GetSection("AuthOptions");
+            var authOptionsConfigurationSection = configuration.GetSection("AuthOptions");
             services.Configure<AuthOptions>(authOptionsConfigurationSection);
             var authOptions = authOptionsConfigurationSection.Get<AuthOptions>();
             return authOptions;
