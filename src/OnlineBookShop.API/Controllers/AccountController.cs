@@ -19,14 +19,12 @@ namespace OnlineBookShop.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly AuthOptions _authenticationOptions;
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(IOptions<AuthOptions> authenticationOptions, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IOptions<AuthOptions> authenticationOptions, SignInManager<User> signInManager)
         {
             _authenticationOptions = authenticationOptions.Value;
             _signInManager = signInManager;
-            _userManager = userManager;
         }
 
         [AllowAnonymous]
