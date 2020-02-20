@@ -10,7 +10,6 @@ using OnlineBookShop.API.Repositories.Implementation;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain.Auth;
 using System.Reflection;
-using System.Text;
 
 namespace OnlineBookShop.API
 {
@@ -34,7 +33,8 @@ namespace OnlineBookShop.API
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<OnlineBookShopDbContext>();
 
-            services.AddJwtAuthentication(Configuration.GetSection("AppSettings:Token").Value);
+            var authOptions = services.ConfigureAuthOptions(Configuration);
+            services.AddJwtAuthentication(authOptions);
             services.AddControllers();
 
             services.AddScoped<IRepository, EFCoreRepository>();

@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using OnlineBookShop.API.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace OnlineBookShop.API.Infrastructure.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void AddJwtAuthentication(this IServiceCollection services, string signingKey)
+        public static void AddJwtAuthentication(this IServiceCollection services, AuthOptions authOptions)
         {
             services.AddAuthentication(options =>
             {
@@ -17,12 +18,26 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuer = true,
+                    ValidIssuer = authOptions.Issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = authOptions.Audience,
+
+                    ValidateLifetime = true,
+
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                 };
             });
+        }
+
+        public static AuthOptions ConfigureAuthOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            IConfigurationSection authOptionsConfigurationSection = configuration.GetSection("AuthOptions");
+            services.Configure<AuthOptions>(authOptionsConfigurationSection);
+            var authOptions = authOptionsConfigurationSection.Get<AuthOptions>();
+            return authOptions;
         }
     }
 }

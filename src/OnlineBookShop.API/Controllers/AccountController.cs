@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using OnlineBookShop.API.Configuration;
 using OnlineBookShop.API.Dtos.Account;
 
 namespace OnlineBookShop.API.Controllers
@@ -16,10 +16,10 @@ namespace OnlineBookShop.API.Controllers
     [AllowAnonymous]
     public class AccountController : ControllerBase
     {
-        private IConfiguration _configuration;
-        public AccountController(IConfiguration configuration)
+        private readonly AuthOptions _authenticationOptions;
+        public AccountController(IOptions<AuthOptions> authenticationOptions)
         {
-            _configuration = configuration;
+            _authenticationOptions = authenticationOptions.Value;
         }
 
         [HttpPost("login")]
@@ -27,10 +27,10 @@ namespace OnlineBookShop.API.Controllers
         {
             if (userForLoginDto.Username == "admin" && userForLoginDto.Password == "Qwerty")
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
+                var signinCredentials = new SigningCredentials(_authenticationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
                 var jwtSecurityToken = new JwtSecurityToken(
+                     issuer: _authenticationOptions.Issuer,
+                     audience: _authenticationOptions.Audience,
                      claims: new List<Claim>(),
                      expires: DateTime.Now.AddMinutes(30),
                      signingCredentials: signinCredentials
@@ -38,9 +38,9 @@ namespace OnlineBookShop.API.Controllers
 
                 var tokenHandler = new JwtSecurityTokenHandler();
 
-                var tokenString = tokenHandler.WriteToken(jwtSecurityToken);
+                var encodedToken = tokenHandler.WriteToken(jwtSecurityToken);
 
-                return Ok(new { AccessToken = tokenString });
+                return Ok(new { AccessToken = encodedToken });
             }
 
             return Unauthorized();
