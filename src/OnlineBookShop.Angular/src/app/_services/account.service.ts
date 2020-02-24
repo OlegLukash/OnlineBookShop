@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserForLoginDto } from '../_models/Account/UserForLoginDto';
+import { UserForLogin } from '../_models/Account/UserForLogin';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { BearerTokenDto } from '../_models/Account/BearerTokenDto';
+import { BearerToken } from '../_models/Account/BearerToken';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class AccountService {
     return token ? true : false;
   }
 
-  login(userForLoginDto: UserForLoginDto): Observable<BearerTokenDto> {
-    return this.http.post<BearerTokenDto>(this.baseUrl + 'login/', userForLoginDto);
+  login(userForLoginDto: UserForLogin): Observable<BearerToken> {
+    return this.http.post<BearerToken>(this.baseUrl + 'login/', userForLoginDto);
   }
 }

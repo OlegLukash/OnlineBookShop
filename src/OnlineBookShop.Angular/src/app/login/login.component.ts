@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserForLoginDto } from '../_models/Account/UserForLoginDto';
+import { UserForLogin } from '../_models/Account/UserForLogin';
 import { AccountService } from '../_services/account.service';
-import { BearerTokenDto } from '../_models/Account/BearerTokenDto';
+import { BearerToken } from '../_models/Account/BearerToken';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   private returnUrl: string;
 
-  public userLoginDto: UserForLoginDto;
+  public userLogin: UserForLogin;
   public userLoginForm: FormGroup;
 
   constructor(private accountService: AccountService,
@@ -34,10 +34,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    const userLogin = Object.assign({}, this.userLoginDto, this.userLoginForm.value);
+    const userLogin = Object.assign({}, this.userLogin, this.userLoginForm.value);
 
     this.accountService.login(userLogin)
-      .subscribe((bearerToken: BearerTokenDto) => {
+      .subscribe((bearerToken: BearerToken) => {
         localStorage.setItem('accessToken', bearerToken.accessToken);
         this.router.navigate([this.returnUrl]);
       });
