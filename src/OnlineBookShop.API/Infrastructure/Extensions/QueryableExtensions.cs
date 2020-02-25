@@ -6,6 +6,7 @@ using OnlineBookShop.Domain;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using System.Text;
 
 namespace OnlineBookShop.API.Infrastructure.Extensions
 {
@@ -53,22 +54,22 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
 
         private static IQueryable<T> ApplyFilters<T>(this IQueryable<T> query, PagedRequest pagedRequest)
         {
-            var predicate = "";
+            var predicate = new StringBuilder();
             var requestFilters = pagedRequest.RequestFilters;
             for (int i = 0; i < requestFilters.Filters.Count; i++)
             {
                 if (i > 0)
                 {
-                    predicate += $" {requestFilters.LogicalOperator} ";
+                    predicate.Append($" {requestFilters.LogicalOperator} ");
                 }
-                predicate = predicate + requestFilters.Filters[i].Path + $".Contains(@{i})";
+                predicate.Append(requestFilters.Filters[i].Path + $".{nameof(string.Contains)}(@{i})");
             }
 
             if (requestFilters.Filters.Any())
             {
                 var propertyValues = requestFilters.Filters.Select(filter => filter.Value).ToArray();
 
-                query = query.Where(predicate, propertyValues);
+                query = query.Where(predicate.ToString(), propertyValues);
             }
 
             return query;
