@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineBookShop.API.Infrastructure.Extensions;
+using OnlineBookShop.API.Infrastructure.Middlewares;
 using OnlineBookShop.API.Repositories.Implementation;
 using OnlineBookShop.API.Repositories.Interfaces;
 using OnlineBookShop.Domain.Auth;
@@ -54,6 +55,10 @@ namespace OnlineBookShop.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseMiddleware<ErrorHandlingMiddleware>();
             }
 
             app.UseRouting();
