@@ -15,7 +15,6 @@ import * as _ from 'lodash';
 export class EditBookComponent implements OnInit {
 
   public pageTitle: string;
-  public book: Book;
   public publishers: Publisher[];
   public bookForm: FormGroup;
 
@@ -28,8 +27,19 @@ export class EditBookComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let objectId: number;
+    this.route.params.subscribe(params => {
+      objectId = +params['id'];
+      if (objectId === 0) {
+        this.pageTitle = 'Add Book:';
+      } else {
+        this.getBook(objectId);
+        this.pageTitle = 'Edit Book:';
+      }
+    });
 
     this.bookForm = this.formBuilder.group({
+      id: [objectId, [Validators.required]],
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       description: ['', Validators.minLength(5)],
       publishedOn: ['', [Validators.required]],
@@ -38,16 +48,6 @@ export class EditBookComponent implements OnInit {
     });
 
     this.getAllPublishers();
-
-    this.route.params.subscribe(params => {
-      const id = +params['id'];
-      if (id === 0) {
-        this.pageTitle = 'Add Book:';
-      } else {
-        this.getBook(id);
-        this.pageTitle = 'Edit Book:';
-      }
-    });
   }
 
   getAllPublishers(): void {
@@ -58,21 +58,19 @@ export class EditBookComponent implements OnInit {
 
   getBook(id: number): void {
     this.bookService.getBook(id).subscribe((book: Book) => {
-      this.book = book;
       this.bookForm.patchValue({
-        title: this.book.title,
-        description: this.book.description,
-        publishedOn: this.book.publishedOn,
-        publisherId: this.book.publisherId,
-        price: this.book.price
+        ...book
       });
     });
   }
 
   saveBook(): void {
     if (this.bookForm.dirty && this.bookForm.valid) {
-       const book = Object.assign({}, this.book, this.bookForm.value);
-       this.bookService.saveBook(book).subscribe(
+       const bookToSave: Book = {
+         ...this.bookForm.value
+       };
+
+       this.bookService.saveBook(bookToSave).subscribe(
          () => this.onSaveComplete()
        );
     }

@@ -14,7 +14,6 @@ export class LoginComponent implements OnInit {
 
   private returnUrl: string;
 
-  public userLogin: UserForLogin;
   public userLoginForm: FormGroup;
 
   constructor(private accountService: AccountService,
@@ -34,8 +33,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    const userLogin = Object.assign({}, this.userLogin, this.userLoginForm.value);
-
+    const userLogin: UserForLogin = {
+      ...this.userLoginForm.value
+    };
     this.accountService.login(userLogin)
       .subscribe((bearerToken: BearerToken) => {
         localStorage.setItem('accessToken', bearerToken.accessToken);
