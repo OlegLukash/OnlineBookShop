@@ -40,7 +40,7 @@ namespace OnlineBookShop.API.Controllers
                      issuer: _authenticationOptions.Issuer,
                      audience: _authenticationOptions.Audience,
                      claims: new List<Claim>(),
-                     expires: DateTime.Now.AddMinutes(30),
+                     expires: DateTime.Now.AddDays(30),
                      signingCredentials: signinCredentials
                 );
 
