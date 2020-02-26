@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,9 +9,12 @@ namespace OnlineBookShop.API.Infrastructure.Middlewares
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        private readonly ILogger _logger;
+
+        public ErrorHandlingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _next = next;
+            _logger = loggerFactory.CreateLogger<ErrorHandlingMiddleware>();
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -22,6 +25,7 @@ namespace OnlineBookShop.API.Infrastructure.Middlewares
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An exception has occured");
                 await HandleExceptionAsync(context, ex);
             }
         }
