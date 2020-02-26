@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { NotfoundpageComponent } from './shared/notfoundpage/notfoundpage.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
    declarations: [
@@ -27,8 +28,8 @@ import { AuthGuard } from './_guards/auth.guard';
       JwtModule.forRoot({
          config: {
            tokenGetter: () => localStorage.getItem('accessToken'),
-           whitelistedDomains: ['localhost:25042'],
-           blacklistedRoutes: ['localhost:25042/api/account/login']
+           whitelistedDomains: [environment.whitelistedDomainsForSendingToken],
+           blacklistedRoutes: [environment.blacklistedRoutes]
       }}),
 
       MatInputModule
