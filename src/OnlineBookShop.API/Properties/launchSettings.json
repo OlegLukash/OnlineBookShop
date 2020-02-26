@@ -20,7 +20,7 @@
     "OnlineBookShop.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/books/1",
       "applicationUrl": "http://localhost:25001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
