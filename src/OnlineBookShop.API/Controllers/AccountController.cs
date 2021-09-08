@@ -9,14 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookShop.API.Configuration;
-using OnlineBookShop.API.Dtos.Account;
+using OnlineBookShop.Common.Dtos.Account;
 using OnlineBookShop.Domain.Auth;
 
 namespace OnlineBookShop.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    [Route("api/account")]
+    public class AccountController : AppBaseController
     {
         private readonly AuthOptions _authenticationOptions;
         private readonly SignInManager<User> _signInManager;

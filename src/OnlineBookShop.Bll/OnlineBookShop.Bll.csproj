@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineBookShop.Common\OnlineBookShop.Common.csproj" />
+    <ProjectReference Include="..\OnlineBookShop.Dal\OnlineBookShop.Dal.csproj" />
+    <ProjectReference Include="..\OnlineBookShop.Domain\OnlineBookShop.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

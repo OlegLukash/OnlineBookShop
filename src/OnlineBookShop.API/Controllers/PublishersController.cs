@@ -1,32 +1,26 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using OnlineBookShop.API.Dtos.Publishers;
-using OnlineBookShop.API.Repositories.Interfaces;
-using OnlineBookShop.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineBookShop.Bll.Interfaces;
+using OnlineBookShop.Common.Dtos.Publishers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PublishersController : ControllerBase
+    [Route("api/publishers")]
+    public class PublishersController : AppBaseController
     {
-        private readonly IRepository _repository;
-        private readonly IMapper _mapper;
+        private readonly IPublisherService _publisherService;
 
-        public PublishersController(IRepository repository, IMapper mapper)
+        public PublishersController(IPublisherService publisherService)
         {
-            _repository = repository;
-            _mapper = mapper;
+            _publisherService = publisherService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPublishers()
+        public async Task<IEnumerable<PublisherListDto>> GetAllPublishers()
         {
-            var publisherList = await _repository.GetAll<Publisher>();
-            var publisherDtoList = _mapper.Map<List<PublisherDto>>(publisherList);
-            return Ok(publisherDtoList);
+            var publishers = await _publisherService.GetAllPublishers();
+            return publishers;
         }
     }
 }

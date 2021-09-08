@@ -1,48 +1,43 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using OnlineBookShop.API.Dtos.Books;
-using OnlineBookShop.API.Infrastructure.Models;
-using OnlineBookShop.API.Repositories.Interfaces;
-using OnlineBookShop.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineBookShop.Bll.Interfaces;
+using OnlineBookShop.Common.Dtos.Books;
+using OnlineBookShop.Common.Models.PagedRequest;
 using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BooksController : ControllerBase
+    [Route("api/books")]
+    public class BooksController : AppBaseController
     {
-        private readonly IRepository _repository;
-        private readonly IMapper _mapper;
+        private readonly IBookService _bookService;
 
-        public BooksController(IRepository repository, IMapper mapper)
+        public BooksController(IBookService bookService)
         {
-            _repository = repository;
-            _mapper = mapper;
+            _bookService = bookService;
         }
 
-        [HttpPost("PaginatedSearch")]
-        public async Task<IActionResult> GetPagedBooks([FromBody]PagedRequest pagedRequest)
+        [HttpPost("paginated-search")]
+        public async Task<PaginatedResult<BookListDto>> GetPagedBooks([FromBody]PagedRequest pagedRequest)
         {
-            var pagedBooksDto = await _repository.GetPagedData<Book, BookGridRowDto>(pagedRequest);
-            return Ok(pagedBooksDto);  
+            var pagedBooksDto = await _bookService.GetPagedBooks(pagedRequest);
+            return pagedBooksDto;  
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBook(int id)
+        public async Task<BookDto> GetBook(int id)
         {
-            var book = await _repository.GetByIdWithInclude<Book>(id, book => book.Publisher);
-            var bookDto = _mapper.Map<BookDto>(book);
-            return Ok(bookDto);
+            var bookDto = await _bookService.GetBook(id);
+            return bookDto;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateBook(BookForUpdateDto bookForUpdateDto)
         {
-            var book = _mapper.Map<Book>(bookForUpdateDto);
-            await _repository.Add<Book>(book);
-
-            var bookDto = _mapper.Map<BookDto>(book);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var bookDto = await _bookService.CreateBook(bookForUpdateDto);
 
             return CreatedAtAction(nameof(GetBook), new { id = bookDto.Id }, bookDto);
         }
@@ -50,18 +45,19 @@ namespace OnlineBookShop.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, BookForUpdateDto bookDto)
         {
-            var book = await _repository.GetById<Book>(id);
-            _mapper.Map(bookDto, book);
-            await _repository.SaveAll();
-            
-            return NoContent();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _bookService.UpdateBook(id, bookDto);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(int id)
+        public async Task DeleteBook(int id)
         {
-            await _repository.Delete<Book>(id);
-            return NoContent();
+            await _bookService.DeleteBook(id);
         }
     }
 }

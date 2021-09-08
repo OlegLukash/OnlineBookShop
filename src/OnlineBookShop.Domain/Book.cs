@@ -15,13 +15,13 @@ namespace OnlineBookShop.Domain
 
         public int PublisherId { get; set; }
 
-        public virtual Publisher Publisher { get; set; }
+        public Publisher Publisher { get; set; }
 
-        public virtual PriceOffer PriceOffer { get; set; }
+        public PriceOffer PriceOffer { get; set; }
 
-        public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
+        public ICollection<AuthorBook> AuthorBooks { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; }
 
         public byte[] RowVersion { get; set; }
 

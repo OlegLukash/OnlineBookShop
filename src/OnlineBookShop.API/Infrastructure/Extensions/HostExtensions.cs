@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OnlineBookShop.Dal;
+using OnlineBookShop.Dal.Seed;
 using OnlineBookShop.Domain.Auth;
 using System;
 using System.Threading.Tasks;
@@ -21,10 +23,10 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
                     var context = services.GetRequiredService<OnlineBookShopDbContext>();
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     context.Database.Migrate();
-                    
-                    await Seed.SeedPublishers(context);
-                    await Seed.SeedBooks(context);
-                    await Seed.SeedUsers(userManager);
+
+                    await PublishersSeed.Seed(context);
+                    await BooksSeed.Seed(context);
+                    await UsersSeed.Seed(userManager);
                 }
                 catch (Exception ex)
                 {

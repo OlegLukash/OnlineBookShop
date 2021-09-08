@@ -1,17 +1,18 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineBookShop.API.Infrastructure.Extensions;
 using OnlineBookShop.API.Infrastructure.Middlewares;
-using OnlineBookShop.API.Repositories.Implementation;
-using OnlineBookShop.API.Repositories.Interfaces;
+using OnlineBookShop.Bll;
+using OnlineBookShop.Bll.Interfaces;
+using OnlineBookShop.Bll.Services;
+using OnlineBookShop.Dal;
+using OnlineBookShop.Dal.Interfaces;
+using OnlineBookShop.Dal.Repositories;
 using OnlineBookShop.Domain.Auth;
-using System.Reflection;
 
 namespace OnlineBookShop.API
 {
@@ -40,13 +41,12 @@ namespace OnlineBookShop.API
 
             var authOptions = services.ConfigureAuthOptions(Configuration);
             services.AddJwtAuthentication(authOptions);
-            services.AddControllers(options => 
-            {
-                options.Filters.Add(new AuthorizeFilter());
-            });
+            services.AddControllers();
 
             services.AddScoped<IRepository, EFCoreRepository>();
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IPublisherService, PublisherService>();
+            services.AddAutoMapper(typeof(BllAssemblyMarker));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

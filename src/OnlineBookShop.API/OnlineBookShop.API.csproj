@@ -8,18 +8,18 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OnlineBookShop.Domain.EFMapping\OnlineBookShop.Domain.EFMapping.csproj" />
+    <ProjectReference Include="..\OnlineBookShop.Bll\OnlineBookShop.Bll.csproj" />
+    <ProjectReference Include="..\OnlineBookShop.Common\OnlineBookShop.Common.csproj" />
+    <ProjectReference Include="..\OnlineBookShop.Dal\OnlineBookShop.Dal.csproj" />
     <ProjectReference Include="..\OnlineBookShop.Domain\OnlineBookShop.Domain.csproj" />
   </ItemGroup>
 

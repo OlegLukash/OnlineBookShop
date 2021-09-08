@@ -10,6 +10,6 @@
 
         public int BookId { get; set; }
 
-        public virtual Book Book { get; set; }
+        public Book Book { get; set; }
     }
 }

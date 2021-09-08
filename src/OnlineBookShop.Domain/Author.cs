@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OnlineBookShop.Domain
 {
@@ -7,6 +6,6 @@ namespace OnlineBookShop.Domain
     {
         public string Name { get; set; }
 
-        public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
+        public ICollection<AuthorBook> AuthorBooks { get; set; }
     }
 }
