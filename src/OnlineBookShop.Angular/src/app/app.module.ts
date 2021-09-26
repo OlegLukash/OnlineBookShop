@@ -30,7 +30,7 @@ import { environment } from 'src/environments/environment';
            tokenGetter: () => localStorage.getItem('accessToken'),
            whitelistedDomains: [environment.whitelistedDomainsForSendingToken],
            blacklistedRoutes: [environment.blacklistedRoutes]
-      }}),
+      }}),//TODO: Change to HttpInterceptor approach
 
       MatInputModule
    ],

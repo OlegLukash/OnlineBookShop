@@ -17,7 +17,7 @@ namespace OnlineBookShop.API.Controllers
         }
 
         [HttpPost("paginated-search")]
-        public async Task<PaginatedResult<BookListDto>> GetPagedBooks([FromBody]PagedRequest pagedRequest)
+        public async Task<PaginatedResult<BookListDto>> GetPagedBooks(PagedRequest pagedRequest)
         {
             var pagedBooksDto = await _bookService.GetPagedBooks(pagedRequest);
             return pagedBooksDto;  

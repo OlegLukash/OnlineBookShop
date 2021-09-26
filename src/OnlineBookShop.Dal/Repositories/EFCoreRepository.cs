@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using OnlineBookShop.Common.Exceptions;
 using OnlineBookShop.Common.Models.PagedRequest;
 using OnlineBookShop.Dal.Extensions;
 using OnlineBookShop.Dal.Interfaces;
@@ -56,7 +57,7 @@ namespace OnlineBookShop.Dal.Repositories
             var entity = await _onlineBookShopDbContext.Set<TEntity>().FindAsync(id);
             if (entity == null)
             {
-                throw new Exception($"Object of type {typeof(TEntity)} with id { id } not found");
+                throw new ValidationException($"Object of type {typeof(TEntity)} with id { id } not found");
             }
 
             _onlineBookShopDbContext.Set<TEntity>().Remove(entity);
