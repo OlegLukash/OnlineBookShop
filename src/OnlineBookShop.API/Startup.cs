@@ -47,6 +47,7 @@ namespace OnlineBookShop.API
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IPublisherService, PublisherService>();
             services.AddAutoMapper(typeof(BllAssemblyMarker));
+            services.AddSwagger(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +56,8 @@ namespace OnlineBookShop.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             else
             {

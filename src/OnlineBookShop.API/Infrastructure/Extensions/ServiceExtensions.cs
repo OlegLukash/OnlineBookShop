@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookShop.API.Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
 
 namespace OnlineBookShop.API.Infrastructure.Extensions
 {
@@ -38,6 +39,39 @@ namespace OnlineBookShop.API.Infrastructure.Extensions
             services.Configure<AuthOptions>(authOptionsConfigurationSection);
             var authOptions = authOptionsConfigurationSection.Get<AuthOptions>();
             return authOptions;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Please enter token",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = JwtBearerDefaults.AuthenticationScheme,
+                                Type = ReferenceType.SecurityScheme,
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+            });
+
+            return services;
         }
     }
 }
