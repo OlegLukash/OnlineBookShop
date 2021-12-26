@@ -59,10 +59,7 @@ namespace OnlineBookShop.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            else
-            {
-                app.UseMiddleware<ErrorHandlingMiddleware>();
-            }
+            app.UseExceptionHandling();
 
             app.UseRouting();
 
@@ -70,6 +67,8 @@ namespace OnlineBookShop.API
             app.UseAuthorization();
 
             app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseDbTransaction();
 
             app.UseEndpoints(endpoints =>
             {

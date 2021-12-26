@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace OnlineBookShop.API.Infrastructure.Middlewares
 {
-    public class ErrorHandlingMiddleware
+    public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _next = next;
-            _logger = loggerFactory.CreateLogger<ErrorHandlingMiddleware>();
+            _logger = loggerFactory.CreateLogger<ExceptionHandlingMiddleware>();
         }
 
         public async Task InvokeAsync(HttpContext context)
