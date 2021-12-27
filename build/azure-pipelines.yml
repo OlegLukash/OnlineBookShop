@@ -1,0 +1,76 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- dev/add-arm-templates
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: Install .NET 6
+  inputs:
+    version: '6.0.101'
+
+- task: NodeTool@0
+  displayName: Install Node.js 13.11.x
+  inputs:
+    versionSpec: '13.11.x'
+
+- task: DotNetCoreCLI@2
+  displayName: Build API Project
+  inputs:
+    command: build
+    projects: 'src/OnlineBookShop.API/*.csproj'
+    arguments: '--configuration $(buildConfiguration)' # Update this to match your need
+
+- task: Cache@2
+  displayName: Cache node modules
+  inputs:
+    key: 'version1 | npm | " $(Agent.OS)" | $(Build.SourcesDirectory)/src/OnlineBookShop.Angular/package.json'
+    path: '$(Build.SourcesDirectory)/src/OnlineBookShop.Angular/node_modules'
+    cacheHitVar: CacheRestored
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'ci'
+    workingDir: 'src/OnlineBookShop.Angular'
+  condition: and(succeeded(), ne(variables['CacheRestored'],'true'))
+
+- task: Npm@1
+  displayName: 'npm build'
+  inputs:
+    command: 'custom'
+    customCommand: 'run build'
+    workingDir: 'src/OnlineBookShop.Angular'
+
+# Publish Web API
+- task: DotNetCoreCLI@2
+  displayName: Publish API Project
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'src/OnlineBookShop.API/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+    zipAfterPublish: true
+
+# Publish angular client
+- task: PublishPipelineArtifact@0
+  displayName: Publish Angular client
+  inputs:
+    targetPath: 'src/OnlineBookShop.Angular/dist/OnlineBookShop-Angular/'
+    artifactName: 'OnlineBookShop-Angular'
+
+# Publish build artifacts to Azure Pipelines
+- task: PublishBuildArtifacts@1
+  displayName: Publish build artifacts to Azure Pipelines
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'OnlineBookShop-Api' 
