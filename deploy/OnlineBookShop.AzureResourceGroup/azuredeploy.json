@@ -1,0 +1,87 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "onlinebookshop-appserviceplanName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "onlinebookshop-appserviceplanSkuName": {
+      "type": "string",
+      "defaultValue": "F1",
+      "allowedValues": [
+        "F1",
+        "D1",
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "metadata": {
+        "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    },
+    "onlinebookshop-sqlserverAdminLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "onlinebookshop-sqlserverAdminLoginPassword": {
+      "type": "securestring"
+    }},
+  "variables": {
+    "onlinebookshop-sqlserverName": "[concat('onlinebookshop-sqlserver', uniqueString(resourceGroup().id))]"},
+  "resources": [
+    {
+      "name": "[parameters('onlinebookshop-appserviceplanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-08-01",
+      "sku": {
+        "name": "[parameters('onlinebookshop-appserviceplanSkuName')]"
+      },
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "onlinebookshop-appserviceplan"
+      },
+      "properties": {
+        "name": "[parameters('onlinebookshop-appserviceplanName')]",
+        "numberOfWorkers": 1
+      }
+    },
+    {
+      "name": "[variables('onlinebookshop-sqlserverName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "onlinebookshop-sqlserver"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('onlinebookshop-sqlserverAdminLogin')]",
+        "administratorLoginPassword": "[parameters('onlinebookshop-sqlserverAdminLoginPassword')]"
+      },
+      "resources": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('onlinebookshop-sqlserverName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    }],
+  "outputs": {}
+}
