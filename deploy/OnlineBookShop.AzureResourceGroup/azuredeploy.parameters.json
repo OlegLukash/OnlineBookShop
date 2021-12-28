@@ -2,5 +2,29 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "administratorLogin": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/1accffae-0404-47fe-a5d6-c5b86db4ff9b/resourceGroups/SharedRG/providers/Microsoft.KeyVault/vaults/onlinebookshop-key-vault"
+        },
+        "secretName": "sqlAdminUsername"
+      }
+    },
+    "administratorLoginPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/1accffae-0404-47fe-a5d6-c5b86db4ff9b/resourceGroups/SharedRG/providers/Microsoft.KeyVault/vaults/onlinebookshop-key-vault"
+        },
+        "secretName": "sqlAdminPassword"
+      }
+    },
+    "dbConnectionString": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/1accffae-0404-47fe-a5d6-c5b86db4ff9b/resourceGroups/SharedRG/providers/Microsoft.KeyVault/vaults/onlinebookshop-key-vault"
+        },
+        "secretName": "onlinebookshopConnectionString"
+      }
+    }
   }
 }

@@ -1,87 +1,166 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "onlinebookshop-appserviceplanName": {
+    "location": {
       "type": "string",
-      "minLength": 1
-    },
-    "onlinebookshop-appserviceplanSkuName": {
-      "type": "string",
-      "defaultValue": "F1",
-      "allowedValues": [
-        "F1",
-        "D1",
-        "B1",
-        "B2",
-        "B3",
-        "S1",
-        "S2",
-        "S3",
-        "P1",
-        "P2",
-        "P3",
-        "P4"
-      ],
+      "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+        "description": "Location for all resources."
       }
     },
-    "onlinebookshop-sqlserverAdminLogin": {
-      "type": "string",
-      "minLength": 1
+    "appServicePlanName": {
+      "defaultValue": "onlinebookshop-appserviceplan",
+      "type": "String"
     },
-    "onlinebookshop-sqlserverAdminLoginPassword": {
-      "type": "securestring"
-    }},
+    "apiWebAppName": {
+      "defaultValue": "onlinebookshop-webApi",
+      "type": "String",
+      "metadata": {
+        "description": "Web Api app name"
+      }
+    },
+    "webClientName": {
+      "defaultValue": "onlinebookshop-client",
+      "type": "String",
+      "metadata": {
+        "description": "Web client app name"
+      }
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "online-bookshop-sql-server",
+      "metadata": {
+        "description": "The name of the SQL logical server."
+      }
+    },
+    "sqlDBName": {
+      "type": "string",
+      "defaultValue": "OnlineBookShop",
+      "metadata": {
+        "description": "The name of the SQL Database."
+      }
+    },
+    "administratorLogin": {
+      "type": "string",
+      "metadata": {
+        "description": "The administrator username of the SQL logical server."
+      }
+    },
+    "administratorLoginPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The administrator password of the SQL logical server."
+      }
+    },
+    "dbConnectionString": {
+      "type": "string",
+      "metadata": {
+        "description": "Database connection String"
+      }
+    }
+  },
   "variables": {
-    "onlinebookshop-sqlserverName": "[concat('onlinebookshop-sqlserver', uniqueString(resourceGroup().id))]"},
+
+  },
   "resources": [
     {
-      "name": "[parameters('onlinebookshop-appserviceplanName')]",
       "type": "Microsoft.Web/serverfarms",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2015-08-01",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('appServicePlanName')]",
+      "location": "[parameters('location')]",
       "sku": {
-        "name": "[parameters('onlinebookshop-appserviceplanSkuName')]"
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "family": "F",
+        "capacity": 0
       },
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "onlinebookshop-appserviceplan"
-      },
+      "kind": "app"
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('apiWebAppName')]",
+      "location": "[parameters('location')]",
+      "apiVersion": "2020-12-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+      ],
       "properties": {
-        "name": "[parameters('onlinebookshop-appserviceplanName')]",
-        "numberOfWorkers": 1
+        "name": "[parameters('apiWebAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "siteConfig": {
+          "netFrameworkVersion": "v6.0",
+          "appSettings": [
+            {
+              "name": "ConnectionStrings:OnlineBookShopConnection",
+              "value": "[parameters('dbConnectionString')]"
+            }
+          ]
+        }
       }
     },
     {
-      "name": "[variables('onlinebookshop-sqlserverName')]",
-      "type": "Microsoft.Sql/servers",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2014-04-01-preview",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "onlinebookshop-sqlserver"
-      },
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('webClientName')]",
+      "location": "[parameters('location')]",
+      "kind": "app",
+      "apiVersion": "2020-12-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+      ],
       "properties": {
-        "administratorLogin": "[parameters('onlinebookshop-sqlserverAdminLogin')]",
-        "administratorLoginPassword": "[parameters('onlinebookshop-sqlserverAdminLoginPassword')]"
+        "serverFarmId": "[parameters('appServicePlanName')]",
+        "siteConfig": {
+          "netFrameworkVersion": "v4.0",
+          "appSettings": [
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2020-02-02-preview",
+      "name": "[parameters('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "[parameters('administratorLogin')]",
+        "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
       },
       "resources": [
         {
-          "name": "AllowAllWindowsAzureIps",
           "type": "firewallrules",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('onlinebookshop-sqlserverName'))]"
-          ],
+          "apiVersion": "2020-08-01-preview",
+          "name": "AllowAllWindowsAzureIps",
+          "location": "[parameters('location')]",
           "properties": {
             "startIpAddress": "0.0.0.0",
-            "endIpAddress": "0.0.0.0"
-          }
+            "endIpAddress": "255.255.255.255"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
+          ]
+        },
+        {
+          "type": "databases",
+          "apiVersion": "2020-08-01-preview",
+          "name": "[parameters('sqlDBName')]",
+          "location": "[parameters('location')]",
+          "sku": {
+            "name": "Basic",
+            "tier": "Basic",
+            "capacity": 5
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', concat(parameters('sqlServerName')))]"
+          ]
         }
       ]
-    }],
+    }
+  ],
   "outputs": {}
 }

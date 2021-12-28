@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '#{API_ENDPOINT}#/api/'
+  apiUrl: 'https://onlinebookshop-webApi.azurewebsites.net/api/'
 };
