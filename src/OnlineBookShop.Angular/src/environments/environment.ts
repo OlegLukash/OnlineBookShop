@@ -4,9 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:25001/api/',
-  whitelistedDomainsForSendingToken: 'localhost:25001',
-  blacklistedRoutes: 'localhost:25001/api/account/login'
+  apiUrl: 'http://localhost:25001/api/'
 };
 
 /*
