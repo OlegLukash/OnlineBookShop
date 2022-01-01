@@ -1,0 +1,2 @@
+# OnlineBookShop
+[![Build Status](https://dev.azure.com/oleglucas/OnlineBookShop/_apis/build/status/github.onlinebookshop.pkg.addarmtemplates?branchName=dev%2Fadd-arm-templates)](https://dev.azure.com/oleglucas/OnlineBookShop/_build/latest?definitionId=4&branchName=dev%2Fadd-arm-templates)
