@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineBookShop.API.Infrastructure.Extensions;
-using OnlineBookShop.API.Infrastructure.Middlewares;
 using OnlineBookShop.Bll;
 using OnlineBookShop.Bll.Interfaces;
 using OnlineBookShop.Bll.Services;
@@ -63,10 +62,9 @@ namespace OnlineBookShop.API
 
             app.UseRouting();
 
+            app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseDbTransaction();
 
