@@ -86,3 +86,10 @@ stages:
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifactName: OnlineBookShop-Build-Artifacts
+    
+    - task: SnykSecurityScan@1
+      inputs:
+        serviceConnectionEndpoint: 'Snyk-ServiceConnection'
+        testType: 'app'
+        monitorWhen: 'always'
+        failOnIssues: true
